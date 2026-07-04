@@ -9,7 +9,10 @@
     "preview": "vite preview",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
-    "cap": "cap"
+    "cap": "cap",
+    "verify:schema": "node ../scripts/check-schema.mjs",
+    "verify:e2e": "node ../scripts/verify-e2e.mjs",
+    "exec:node": "node"
   },
   "dependencies": {
     "@capacitor/android": "^8.4.1",

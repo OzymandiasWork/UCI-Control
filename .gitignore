@@ -6,3 +6,9 @@ app/android/
 settings-arreglado.json
 permisos-proyecto.json
 *.bat
+scripts/secret-*
+app/secret-*
+app/.vite/
+.claude/
+UCI_Dashboard_Completo/
+dataucicontrrol/
