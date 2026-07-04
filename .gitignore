@@ -9,6 +9,7 @@ permisos-proyecto.json
 scripts/secret-*
 app/secret-*
 app/.vite/
+.vercel/
 .claude/
 UCI_Dashboard_Completo/
 dataucicontrrol/
