@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { LoginPage } from './features/auth/LoginPage'
 import { BoardPage } from './features/board/BoardPage'
+import { PatientPage } from './features/patient/PatientPage'
 import { useSession } from './lib/supabase/useSession'
 
 function Protected({ children }: { children: ReactNode }) {
@@ -17,7 +18,7 @@ export default function App() {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/" element={<Protected><BoardPage /></Protected>} />
-        <Route path="/box/:boxNumber" element={<Protected><h1>Box (en construcción)</h1></Protected>} />
+        <Route path="/box/:boxNumber" element={<Protected><PatientPage /></Protected>} />
         <Route path="/ejecutivo" element={<Protected><h1>Ejecutivo (en construcción)</h1></Protected>} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
