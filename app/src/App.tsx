@@ -4,6 +4,7 @@ import { LoginPage } from './features/auth/LoginPage'
 import { BoardPage } from './features/board/BoardPage'
 import { PatientPage } from './features/patient/PatientPage'
 import { ExecutivePage } from './features/executive/ExecutivePage'
+import { ConnectionBanner } from './features/shared/ConnectionBanner'
 import { useSession } from './lib/supabase/useSession'
 
 function Protected({ children }: { children: ReactNode }) {
@@ -16,6 +17,7 @@ function Protected({ children }: { children: ReactNode }) {
 export default function App() {
   return (
     <BrowserRouter>
+      <ConnectionBanner />
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/" element={<Protected><BoardPage /></Protected>} />

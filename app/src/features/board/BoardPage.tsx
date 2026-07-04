@@ -1,10 +1,11 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { SelectField, TextField } from '../../design-system/Field'
 import { ALERT_TYPES, BOX_COUNT, RESIDENTES } from '../../lib/clinical/constants'
 import { supabase } from '../../lib/supabase/client'
 import { useBoard } from '../../lib/supabase/useBoard'
 import { AgendaPanel } from './AgendaPanel'
+import { animateGridEntrance } from './animations'
 import { BoxCard } from './BoxCard'
 import './board.css'
 
@@ -16,6 +17,11 @@ export function BoardPage() {
   const [alertFilter, setAlertFilter] = useState('Todas')
   const [residenteFilter, setResidenteFilter] = useState('Todos')
   const [search, setSearch] = useState('')
+  const gridRef = useRef<HTMLUListElement>(null)
+
+  useEffect(() => {
+    if (!isLoading && gridRef.current) return animateGridEntrance(gridRef.current)
+  }, [isLoading])
 
   const byBox = useMemo(() => {
     const m = new Map(stays.map(s => [s.box_number, s]))
@@ -68,7 +74,7 @@ export function BoardPage() {
               <button type="button" onClick={() => refetch()}>Reintentar</button>
             </p>
           )}
-          <ul className="board__grid">
+          <ul className="board__grid" ref={gridRef}>
             {visible.map(({ n, stay }) => (
               <li key={n}><BoxCard boxNumber={n} stay={stay} /></li>
             ))}

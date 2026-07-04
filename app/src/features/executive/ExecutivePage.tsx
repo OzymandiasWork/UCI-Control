@@ -1,14 +1,22 @@
+import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { Badge } from '../../design-system/Badge'
 import { ALERT_TYPES } from '../../lib/clinical/constants'
 import { sofaRisk } from '../../lib/clinical/sofa'
 import { staySofaToday } from '../../lib/supabase/derive'
 import { useBoard } from '../../lib/supabase/useBoard'
+import { animateKpis } from '../board/animations'
 import { boardKpis } from './kpis'
 import './executive.css'
 
 export function ExecutivePage() {
   const { data: stays = [], isLoading } = useBoard()
+  const kpisRef = useRef<HTMLDListElement>(null)
+
+  useEffect(() => {
+    if (!isLoading && kpisRef.current) return animateKpis(kpisRef.current)
+  }, [isLoading])
+
   if (isLoading) return <p role="status">Cargando…</p>
   const k = boardKpis(stays)
   const now = new Date()
@@ -26,7 +34,7 @@ export function ExecutivePage() {
         </p>
       </header>
 
-      <dl className="exec__kpis">
+      <dl className="exec__kpis" ref={kpisRef}>
         <div className="kpi"><dt>Ocupación</dt><dd data-kpi>{k.occupied}<span className="kpi__sub">/24</span></dd></div>
         <div className="kpi"><dt>Camas libres</dt><dd data-kpi>{k.freeBeds}</dd></div>
         <div className="kpi"><dt>SOFA promedio</dt><dd>{k.sofaAvg}</dd></div>
