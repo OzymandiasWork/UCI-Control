@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.env.local
+*.log
+app/android/
+settings-arreglado.json
+permisos-proyecto.json
+*.bat
