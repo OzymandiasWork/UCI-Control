@@ -1,0 +1,54 @@
+.ds-badge {
+  display: inline-flex; align-items: center; gap: var(--space-1);
+  padding: 2px var(--space-2);
+  border: 1px solid; border-radius: 999px;
+  font-size: 0.8rem; font-weight: 600; line-height: 1.4;
+}
+.ds-badge--ok     { color: var(--ok-text);     background: var(--ok-tint);     border-color: var(--ok-border); }
+.ds-badge--warn   { color: var(--warn-text);   background: var(--warn-tint);   border-color: var(--warn-border); }
+.ds-badge--danger { color: var(--danger-text); background: var(--danger-tint); border-color: var(--danger-border); }
+.ds-badge--eol    { color: var(--eol-text);    background: var(--eol-tint);    border-color: var(--eol-border); }
+.ds-badge--proc   { color: var(--proc-text);   background: var(--proc-tint);   border-color: var(--proc-border); }
+.ds-badge--trial  { color: var(--trial-text);  background: var(--trial-tint);  border-color: var(--trial-border); }
+.ds-badge--muted  { color: var(--ink-secondary); background: var(--bg); border-color: var(--border-strong); }
+
+.ds-button {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2);
+  min-height: 40px; padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--accent-strong); border-radius: var(--radius-sm);
+  background: var(--accent-strong); color: #fff; font-weight: 600;
+}
+.ds-button:hover { filter: brightness(1.08); }
+.ds-button:disabled { opacity: 0.6; cursor: not-allowed; }
+.ds-button--secondary { background: var(--surface); color: var(--accent-strong); }
+.ds-button--danger { background: var(--danger-text); border-color: var(--danger-text); }
+
+.ds-field { display: flex; flex-direction: column; gap: var(--space-1); }
+.ds-field > label { font-size: 0.8rem; font-weight: 600; color: var(--ink-secondary); }
+.ds-field input, .ds-field select, .ds-field textarea {
+  min-height: 40px; padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  background: var(--surface);
+}
+.ds-field textarea { min-height: 80px; }
+.ds-numfield { display: flex; align-items: center; gap: var(--space-2); }
+.ds-numfield input { width: 72px; text-align: center; }
+.ds-numfield button {
+  min-width: 32px; min-height: 32px;
+  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  background: var(--surface); font-weight: 700;
+}
+
+.ds-tabs [role='tablist'] {
+  display: flex; gap: var(--space-1); flex-wrap: wrap;
+  border-bottom: 1px solid var(--border);
+}
+.ds-tabs [role='tab'] {
+  border: none; background: none; padding: var(--space-2) var(--space-3);
+  color: var(--ink-secondary); font-weight: 600;
+  border-bottom: 2px solid transparent; border-radius: 0;
+}
+.ds-tabs [role='tab'][aria-selected='true'] {
+  color: var(--accent-strong); border-bottom-color: var(--accent);
+}
+.ds-tabs [role='tabpanel'] { padding: var(--space-4) 0; }
