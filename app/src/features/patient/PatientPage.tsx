@@ -5,6 +5,12 @@ import { ALERT_TYPES, BOX_COUNT } from '../../lib/clinical/constants'
 import { useBoard } from '../../lib/supabase/useBoard'
 import { IngresoEgreso } from './IngresoEgreso'
 import { TabClinico } from './tabs/TabClinico'
+import { TabEquipo } from './tabs/TabEquipo'
+import { TabATB } from './tabs/TabATB'
+import { TabNutricion } from './tabs/TabNutricion'
+import { TabSofa } from './tabs/TabSofa'
+import { TabMetas } from './tabs/TabMetas'
+import { TabSugerencias } from './tabs/TabSugerencias'
 import './patient.css'
 
 export function PatientPage() {
@@ -34,6 +40,12 @@ export function PatientPage() {
           label={`Módulos del paciente del box ${n}`}
           tabs={[
             { id: 'clinico', label: 'Clínico', content: <TabClinico stay={stay} /> },
+            { id: 'equipo', label: 'Equipo', content: <TabEquipo stay={stay} /> },
+            { id: 'atb', label: 'ATB', content: <TabATB stay={stay} /> },
+            { id: 'nutricion', label: 'Nutrición', content: <TabNutricion stay={stay} /> },
+            { id: 'sofa', label: 'SOFA', content: <TabSofa stay={stay} /> },
+            { id: 'metas', label: 'Metas', content: <TabMetas stay={stay} /> },
+            { id: 'sugerencias', label: 'Sugerencias', content: <TabSugerencias stay={stay} /> },
           ]}
         />
       )}
