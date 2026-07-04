@@ -1,0 +1,43 @@
+:root {
+  /* Superficie */
+  --bg: #FAF9F5;
+  --surface: #FFFFFF;
+  --surface-raised: #FFFFFF;
+  --border: #E8E6DE;
+  --border-strong: #D5D2C6;
+
+  /* Tinta */
+  --ink: #1A1915;
+  --ink-secondary: #5E5B52;
+  --ink-muted: #77746A;
+
+  /* Acento Claude */
+  --accent: #D97757;          /* gráficos, bordes, foco (3:1 sobre --bg) */
+  --accent-strong: #A8452C;   /* texto interactivo y botones (AA sobre claro) */
+  --accent-tint: #FBEDE7;
+
+  /* Estados clínicos: texto AA sobre su tinte */
+  --ok-text: #1A7F37;      --ok-tint: #DAFBE1;      --ok-border: #1A7F37;
+  --warn-text: #9A6700;    --warn-tint: #FFF8C5;    --warn-border: #9A6700;
+  --danger-text: #A40E26;  --danger-tint: #FFEBE9;  --danger-border: #A40E26;
+  --eol-text: #6639BA;     --eol-tint: #FBEFFF;     --eol-border: #6639BA;
+  --proc-text: #0550AE;    --proc-tint: #DDF4FF;    --proc-border: #0550AE;
+  --trial-text: #116964;   --trial-tint: #D5F5F0;   --trial-border: #116964;
+
+  /* Tipografía */
+  --font-ui: 'Inter Variable', system-ui, sans-serif;
+  --font-display: 'Source Serif 4 Variable', Georgia, serif;
+
+  /* Métrica */
+  --radius: 10px;
+  --radius-sm: 6px;
+  --shadow: 0 1px 3px rgba(26, 25, 21, 0.07), 0 1px 2px rgba(26, 25, 21, 0.04);
+  --shadow-raised: 0 4px 16px rgba(26, 25, 21, 0.10);
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
+  --space-5: 24px; --space-6: 32px;
+  --tap-min: 24px; /* WCAG 2.2 — 2.5.8 target size */
+
+  /* Foco */
+  --focus-ring: 2px solid var(--accent);
+  --focus-offset: 2px;
+}
