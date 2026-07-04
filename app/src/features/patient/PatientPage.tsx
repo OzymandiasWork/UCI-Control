@@ -1,5 +1,7 @@
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useIsMutating } from '@tanstack/react-query'
 import { Badge } from '../../design-system/Badge'
+import { Button } from '../../design-system/Button'
 import { Tabs } from '../../design-system/Tabs'
 import { ALERT_TYPES, BOX_COUNT } from '../../lib/clinical/constants'
 import { useBoard } from '../../lib/supabase/useBoard'
@@ -15,8 +17,10 @@ import './patient.css'
 
 export function PatientPage() {
   const { boxNumber } = useParams()
+  const navigate = useNavigate()
   const n = Number(boxNumber)
   const { data: stays = [], isLoading } = useBoard()
+  const saving = useIsMutating() > 0
   const stay = stays.find(s => s.box_number === n) ?? null
 
   if (isLoading) return <p role="status">Cargando…</p>
@@ -27,6 +31,11 @@ export function PatientPage() {
         <Link to="/" className="patient__back">← Tablero</Link>
         <h1>Box {n}</h1>
         {stay && <Badge tone={ALERT_TYPES[stay.alert].tone}>{ALERT_TYPES[stay.alert].label}</Badge>}
+        {stay && (
+          <span className={`savestate${saving ? ' savestate--busy' : ''}`} role="status">
+            {saving ? 'Guardando…' : '✓ Guardado automático'}
+          </span>
+        )}
         <nav className="patient__nav" aria-label="Navegar entre boxes">
           {n > 1 && <Link to={`/box/${n - 1}`}>← Box {n - 1}</Link>}
           {n < BOX_COUNT && <Link to={`/box/${n + 1}`}>Box {n + 1} →</Link>}
@@ -48,6 +57,16 @@ export function PatientPage() {
             { id: 'sugerencias', label: 'Sugerencias', content: <TabSugerencias stay={stay} /> },
           ]}
         />
+      )}
+
+      {stay && (
+        <footer className="patient__footer">
+          <Button onClick={() => navigate('/')}>✓ Guardar y volver al tablero</Button>
+          <p className="patient__hint">
+            Tranquilo: cada cambio se guarda solo, al instante. Este botón simplemente te
+            devuelve al tablero.
+          </p>
+        </footer>
       )}
     </div>
   )
