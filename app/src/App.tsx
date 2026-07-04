@@ -14,12 +14,20 @@ function Protected({ children }: { children: ReactNode }) {
   return <>{children}</>
 }
 
+/** Con sesión activa, /login redirige al tablero (incluye el instante post-login). */
+function LoginRoute() {
+  const { session, loading } = useSession()
+  if (loading) return <p role="status">Cargando…</p>
+  if (session) return <Navigate to="/" replace />
+  return <LoginPage />
+}
+
 export default function App() {
   return (
     <BrowserRouter>
       <ConnectionBanner />
       <Routes>
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/login" element={<LoginRoute />} />
         <Route path="/" element={<Protected><BoardPage /></Protected>} />
         <Route path="/box/:boxNumber" element={<Protected><PatientPage /></Protected>} />
         <Route path="/ejecutivo" element={<Protected><ExecutivePage /></Protected>} />
