@@ -9,6 +9,7 @@ import {
 } from '../../../lib/clinical/vent'
 import { useChildRow, useUpsertVent } from '../../../lib/supabase/useBoard'
 import type { StayFull, VentSettings } from '../../../lib/supabase/types'
+import { AutoNumber, AutoText } from '../AutoFields'
 
 const MODOS_SV = ['VCV-AC', 'PCV-AC', 'PRVC', 'PS (VSP)', 'CPAP', 'SIMV'] as const
 
@@ -65,17 +66,17 @@ export function TabVentilacion({ stay }: { stay: StayFull }) {
         <h3 id="vent-params">🫁 Parámetros ventilatorios</h3>
         <div className="tabgrid">
           <SelectField label="Modo SV" value={v.modo_sv} onChange={x => upd({ modo_sv: x })} options={MODOS_SV} />
-          <NumberField label="FiO₂ (%)" value={v.fio2} min={21} max={100} onChange={x => upd({ fio2: x })} />
-          <NumberField label="SpO₂ (%)" value={v.spo2} max={100} onChange={x => upd({ spo2: x })} />
-          <NumberField label="PaO₂ (mmHg)" value={v.pao2} onChange={x => upd({ pao2: x })} />
-          <NumberField label="PEEP extrínseco (cmH₂O)" value={v.peep} max={40} onChange={x => upd({ peep: x })} />
-          <NumberField label="PEEP intrínseco (cmH₂O)" value={v.peep_i} max={40} onChange={x => upd({ peep_i: x })} />
-          <NumberField label="VT / Vti (mL)" value={v.vt} max={2000} onChange={x => upd({ vt: x })} />
-          <NumberField label="PC / PS (cmH₂O)" value={v.pc_ps} max={60} onChange={x => upd({ pc_ps: x })} />
-          <NumberField label="P. Plateau (cmH₂O)" value={v.pplat} max={60} onChange={x => upd({ pplat: x })} />
-          <NumberField label="EtCO₂ (mmHg)" value={v.etco2} max={150} onChange={x => upd({ etco2: x })} />
-          <TextField label="FR prog / total" value={v.fr_prog} onChange={x => upd({ fr_prog: x })} />
-          <NumberField label="Compliancia Cest (mL/cmH₂O)" value={v.cest} max={200} onChange={x => upd({ cest: x })} />
+          <AutoNumber label="FiO₂ (%)" value={v.fio2} min={21} max={100} onSave={x => upd({ fio2: x })} />
+          <AutoNumber label="SpO₂ (%)" value={v.spo2} max={100} onSave={x => upd({ spo2: x })} />
+          <AutoNumber label="PaO₂ (mmHg)" value={v.pao2} onSave={x => upd({ pao2: x })} />
+          <AutoNumber label="PEEP extrínseco (cmH₂O)" value={v.peep} max={40} onSave={x => upd({ peep: x })} />
+          <AutoNumber label="PEEP intrínseco (cmH₂O)" value={v.peep_i} max={40} onSave={x => upd({ peep_i: x })} />
+          <AutoNumber label="VT / Vti (mL)" value={v.vt} max={2000} onSave={x => upd({ vt: x })} />
+          <AutoNumber label="PC / PS (cmH₂O)" value={v.pc_ps} max={60} onSave={x => upd({ pc_ps: x })} />
+          <AutoNumber label="P. Plateau (cmH₂O)" value={v.pplat} max={60} onSave={x => upd({ pplat: x })} />
+          <AutoNumber label="EtCO₂ (mmHg)" value={v.etco2} max={150} onSave={x => upd({ etco2: x })} />
+          <AutoText label="FR prog / total" value={v.fr_prog} onSave={x => upd({ fr_prog: x })} />
+          <AutoNumber label="Compliancia Cest (mL/cmH₂O)" value={v.cest} max={200} onSave={x => upd({ cest: x })} />
         </div>
       </section>
 
@@ -108,8 +109,8 @@ export function TabVentilacion({ stay }: { stay: StayFull }) {
         <div className="tabrow">
           <SelectField label="Sexo" value={v.sexo === 'h' ? 'Hombre' : 'Mujer'}
             onChange={x => upd({ sexo: x === 'Hombre' ? 'h' : 'm' })} options={['Hombre', 'Mujer']} />
-          <NumberField label="Talla (cm)" value={v.talla_cm} max={230} onChange={x => upd({ talla_cm: x })} />
-          <NumberField label="Peso real (kg)" value={v.peso_real} max={300} onChange={x => upd({ peso_real: x })} />
+          <AutoNumber label="Talla (cm)" value={v.talla_cm} max={230} onSave={x => upd({ talla_cm: x })} />
+          <AutoNumber label="Peso real (kg)" value={v.peso_real} max={300} onSave={x => upd({ peso_real: x })} />
         </div>
         {ibwVal && vts ? (
           <div className="vent-indices">
@@ -172,13 +173,13 @@ export function TabVentilacion({ stay }: { stay: StayFull }) {
       <section aria-labelledby="vent-weaning">
         <h3 id="vent-weaning">📈 Weaning / Prueba de ventilación espontánea (SBT)</h3>
         <div className="tabgrid">
-          <NumberField label="IRRS (resp/min/L)" value={v.irrs} max={300} onChange={x => upd({ irrs: x })} />
-          <NumberField label="PIM (cmH₂O)" value={v.pim} min={-120} max={0} onChange={x => upd({ pim: x })} />
-          <NumberField label="PEF (L/min)" value={v.pef} max={999} onChange={x => upd({ pef: x })} />
-          <NumberField label="RASS" value={v.rass} min={-5} max={4} onChange={x => upd({ rass: x })} />
+          <AutoNumber label="IRRS (resp/min/L)" value={v.irrs} max={300} onSave={x => upd({ irrs: x })} />
+          <AutoNumber label="PIM (cmH₂O)" value={v.pim} min={-120} max={0} onSave={x => upd({ pim: x })} />
+          <AutoNumber label="PEF (L/min)" value={v.pef} max={999} onSave={x => upd({ pef: x })} />
+          <AutoNumber label="RASS" value={v.rass} min={-5} max={4} onSave={x => upd({ rass: x })} />
           <SelectField label="CAM-ICU" value={v.cam_icu === 'neg' ? 'Negativo' : 'Positivo'}
             onChange={x => upd({ cam_icu: x === 'Negativo' ? 'neg' : 'pos' })} options={['Negativo', 'Positivo']} />
-          <NumberField label="SpO₂ en PS (%)" value={v.sat_ps} max={100} onChange={x => upd({ sat_ps: x })} />
+          <AutoNumber label="SpO₂ en PS (%)" value={v.sat_ps} max={100} onSave={x => upd({ sat_ps: x })} />
           <SelectField label="Secreciones" value={v.secreciones === 'ok' ? 'Manejables' : 'Abundantes'}
             onChange={x => upd({ secreciones: x === 'Manejables' ? 'ok' : 'abund' })} options={['Manejables', 'Abundantes']} />
         </div>

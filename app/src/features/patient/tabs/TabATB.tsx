@@ -1,8 +1,8 @@
 import { Badge } from '../../../design-system/Badge'
 import { Button } from '../../../design-system/Button'
-import { NumberField, TextField } from '../../../design-system/Field'
 import { useChildRow } from '../../../lib/supabase/useBoard'
 import type { StayFull } from '../../../lib/supabase/types'
+import { AutoNumber, AutoText } from '../AutoFields'
 
 export function TabATB({ stay }: { stay: StayFull }) {
   const atb = useChildRow('antibiotics')
@@ -10,10 +10,10 @@ export function TabATB({ stay }: { stay: StayFull }) {
     <div>
       {stay.antibiotics.map(a => (
         <div className="tabrow" key={a.id}>
-          <TextField label="Antibiótico" value={a.drug}
-            onChange={v => atb.update.mutate({ id: a.id, patch: { drug: v } })} />
-          <NumberField label="Día de tratamiento" value={a.day}
-            onChange={v => atb.update.mutate({ id: a.id, patch: { day: v } })} />
+          <AutoText label="Antibiótico" value={a.drug}
+            onSave={v => atb.update.mutate({ id: a.id, patch: { drug: v } })} />
+          <AutoNumber label="Día de tratamiento" value={a.day}
+            onSave={v => atb.update.mutate({ id: a.id, patch: { day: v } })} />
           {a.day >= 7 && <Badge tone="warn">≥7 días — evaluar suspensión</Badge>}
           <Button variant="secondary" aria-label={`Eliminar ${a.drug || 'antibiótico'}`}
             onClick={() => atb.remove.mutate(a.id)}>Eliminar</Button>

@@ -1,7 +1,7 @@
 import { Button } from '../../../design-system/Button'
-import { TextField } from '../../../design-system/Field'
 import { useChildRow } from '../../../lib/supabase/useBoard'
 import type { StayFull } from '../../../lib/supabase/types'
+import { AutoText } from '../AutoFields'
 
 export function TabMetas({ stay }: { stay: StayFull }) {
   const goals = useChildRow('goals')
@@ -14,8 +14,8 @@ export function TabMetas({ stay }: { stay: StayFull }) {
             <input type="checkbox" checked={g.done} id={`goal-${g.id}`}
               onChange={e => goals.update.mutate({ id: g.id, patch: { done: e.target.checked } })}
               aria-label={`Meta cumplida: ${g.text || 'sin texto'}`} />
-            <TextField label={`Meta ${i + 1}`} value={g.text}
-              onChange={v => goals.update.mutate({ id: g.id, patch: { text: v } })} />
+            <AutoText label={`Meta ${i + 1}`} value={g.text}
+              onSave={v => goals.update.mutate({ id: g.id, patch: { text: v } })} />
             <Button variant="secondary" aria-label={`Eliminar meta ${g.text || 'sin texto'}`}
               onClick={() => goals.remove.mutate(g.id)}>Eliminar</Button>
           </li>

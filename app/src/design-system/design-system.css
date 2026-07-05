@@ -52,3 +52,11 @@
   color: var(--accent-strong); border-bottom-color: var(--accent);
 }
 .ds-tabs [role='tabpanel'] { padding: var(--space-4) 0; }
+
+@media (max-width: 640px) {
+  .ds-tabs [role='tablist'] {
+    flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+  .ds-tabs [role='tab'] { white-space: nowrap; flex-shrink: 0; }
+}

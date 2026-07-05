@@ -2,7 +2,8 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Badge } from '../../design-system/Badge'
 import { Button } from '../../design-system/Button'
-import { SelectField, TextField } from '../../design-system/Field'
+import { SelectField } from '../../design-system/Field'
+import { AutoText } from '../patient/AutoFields'
 import { ROLES_TURNO, TURNOS, nurseLoad } from '../../lib/clinical/staffing'
 import { useBoard } from '../../lib/supabase/useBoard'
 import { useTurno, useTurnoMutations } from '../../lib/supabase/useTurno'
@@ -62,10 +63,10 @@ export function TurnoPage() {
             <SelectField label="Rol" value={s.role}
               onChange={v => update.mutate({ id: s.id, patch: { role: v } })}
               options={ROLES_TURNO} />
-            <TextField label="Nombre" value={s.name}
-              onChange={v => update.mutate({ id: s.id, patch: { name: v } })} />
-            <TextField label="Boxes asignados" value={s.boxes}
-              onChange={v => update.mutate({ id: s.id, patch: { boxes: v } })} />
+            <AutoText label="Nombre" value={s.name}
+              onSave={v => update.mutate({ id: s.id, patch: { name: v } })} />
+            <AutoText label="Boxes asignados" value={s.boxes}
+              onSave={v => update.mutate({ id: s.id, patch: { boxes: v } })} />
             <Button variant="secondary" aria-label={`Quitar a ${s.name || 'persona sin nombre'} del turno`}
               onClick={() => remove.mutate(s.id)}>Quitar</Button>
           </div>
