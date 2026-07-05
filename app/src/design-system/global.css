@@ -1,6 +1,10 @@
 *, *::before, *::after { box-sizing: border-box; }
 
-html { -webkit-text-size-adjust: 100%; }
+html {
+  -webkit-text-size-adjust: 100%;
+  /* Evita el rebote elástico raro dentro de la app empaquetada (Capacitor) */
+  overscroll-behavior-y: none;
+}
 
 body {
   margin: 0;
@@ -9,7 +13,22 @@ body {
   font-family: var(--font-ui);
   font-size: 16px;
   line-height: 1.5;
+  min-height: 100dvh;
 }
+
+/* Safe areas: respeta notch / isla dinámica / barra inferior en modo app.
+   Se aplica a los contenedores raíz de cada pantalla. */
+.board, .patient, .exec, .turno, .login {
+  padding-left: max(var(--space-4), env(safe-area-inset-left));
+  padding-right: max(var(--space-4), env(safe-area-inset-right));
+  padding-bottom: max(var(--space-4), env(safe-area-inset-bottom));
+}
+.board, .patient, .exec, .turno {
+  padding-top: max(var(--space-4), env(safe-area-inset-top));
+}
+
+/* En iOS, inputs < 16px provocan zoom automático al enfocar. Forzamos ≥16px. */
+input, select, textarea { font-size: max(16px, 1rem); }
 
 h1, h2, h3 { font-family: var(--font-display); font-weight: 600; margin: 0; }
 
