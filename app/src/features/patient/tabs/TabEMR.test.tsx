@@ -73,3 +73,33 @@ test('borrar una sesión del historial pide confirmación antes de llamar a remo
   await userEvent.click(screen.getByRole('button', { name: 'Confirmar' }))
   expect(childRow.remove.mutate).toHaveBeenCalledWith('e1')
 })
+
+test('con el formulario completamente vacío, no se guarda nada', async () => {
+  render(<TabEMR stay={base} />)
+  await userEvent.click(screen.getByRole('button', { name: /registrar sesión/i }))
+  expect(childRow.insert.mutate).not.toHaveBeenCalled()
+})
+
+test('el historial muestra solo las 5 sesiones más recientes (excluye la más antigua)', () => {
+  const mk = (id: string, date: string, carga: number) => ({
+    id, stay_id: 's1', session_at: date, session_type: 'fuerza' as const,
+    carga_pct: carga, cmh2o: null, repeticiones: null, series: null, minutos: null,
+    tolerancia: true, borg: null, pim_test: null, pef_test: null,
+    fraccion_acort_pct: null, eco_diaf_esp_mm: null, eco_diaf_ins_mm: null, notas: '',
+  })
+  const stayWithHistory: StayFull = {
+    ...base,
+    emr_sessions: [
+      mk('e0', '2026-07-01T10:00:00Z', 10),
+      mk('e1', '2026-07-02T10:00:00Z', 20),
+      mk('e2', '2026-07-03T10:00:00Z', 30),
+      mk('e3', '2026-07-04T10:00:00Z', 40),
+      mk('e4', '2026-07-05T10:00:00Z', 50),
+      mk('e5', '2026-07-06T10:00:00Z', 60),
+    ],
+  }
+  render(<TabEMR stay={stayWithHistory} />)
+  expect(screen.getAllByRole('button', { name: 'Eliminar sesión' })).toHaveLength(5)
+  expect(screen.getByText(/Carga 60%/)).toBeInTheDocument()
+  expect(screen.queryByText(/Carga 10%/)).not.toBeInTheDocument()
+})

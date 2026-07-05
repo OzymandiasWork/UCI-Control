@@ -92,3 +92,34 @@ test('el historial muestra el total y la interpretación correctos para una eval
   expect(screen.getByText(/MRC-SS 36 \/ 60 · Debilidad adquirida leve/)).toBeInTheDocument()
   expect(screen.queryByText(/grupos evaluados/)).not.toBeInTheDocument()
 })
+
+test('con el formulario completamente vacío, no se guarda nada', async () => {
+  render(<TabFuncional stay={base} />)
+  await userEvent.click(screen.getByRole('button', { name: /guardar evaluación/i }))
+  expect(childRow.insert.mutate).not.toHaveBeenCalled()
+})
+
+test('el historial muestra solo las 5 evaluaciones más recientes (excluye la más antigua)', () => {
+  const mk = (id: string, date: string, total: number) => ({
+    id, stay_id: 's1', assessed_at: date,
+    abd_hh_d: total, flex_hh_d: null, ext_mu_d: null, abd_hh_i: null, flex_hh_i: null, ext_mu_i: null,
+    flex_rod_d: null, ext_rod_d: null, dors_pie_d: null, flex_rod_i: null, ext_rod_i: null, dors_pie_i: null,
+    fss_icu: null, ims: null, handgrip_d: null, handgrip_i: null, tiempo_trabajo_min: null,
+    pct_fcr: null, borg_fuerza: null, dolor_ena: null, dva_sesion: false, uma: null, set_min: null,
+  })
+  const stayWithHistory: StayFull = {
+    ...base,
+    mrc_assessments: [
+      mk('m0', '2026-07-01T10:00:00Z', 0),
+      mk('m1', '2026-07-02T10:00:00Z', 1),
+      mk('m2', '2026-07-03T10:00:00Z', 2),
+      mk('m3', '2026-07-04T10:00:00Z', 3),
+      mk('m4', '2026-07-05T10:00:00Z', 4),
+      mk('m5', '2026-07-06T10:00:00Z', 5),
+    ],
+  }
+  render(<TabFuncional stay={stayWithHistory} />)
+  expect(screen.getAllByRole('button', { name: 'Eliminar evaluación' })).toHaveLength(5)
+  expect(screen.getByText(/MRC-SS 5 \/ 60/)).toBeInTheDocument()
+  expect(screen.queryByText(/MRC-SS 0 \/ 60/)).not.toBeInTheDocument()
+})
