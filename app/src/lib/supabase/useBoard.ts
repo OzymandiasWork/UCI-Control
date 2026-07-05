@@ -26,6 +26,8 @@ export function useBoard() {
       .on('postgres_changes', { event: '*', schema: 'public' }, () => {
         qc.invalidateQueries({ queryKey: BOARD_KEY })
         qc.invalidateQueries({ queryKey: EVENTS_KEY })
+        qc.invalidateQueries({ queryKey: ['turno'] })
+        qc.invalidateQueries({ queryKey: ['occupancy'] })
       })
       .subscribe()
     return () => { void supabase.removeChannel(channel) }

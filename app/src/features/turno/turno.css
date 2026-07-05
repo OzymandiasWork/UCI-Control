@@ -1,0 +1,10 @@
+.turno { max-width: 960px; margin: 0 auto; padding: var(--space-4); }
+.turno__header { display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; margin-bottom: var(--space-4); }
+.turno__filters { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); max-width: 420px; margin-bottom: var(--space-4); }
+.turno__chips { display: flex; gap: var(--space-2); flex-wrap: wrap; margin: var(--space-3) 0; }
+.turno__add { display: flex; gap: var(--space-2); flex-wrap: wrap; margin-top: var(--space-3); }
+.turno h2 { margin: var(--space-5) 0 var(--space-2); }
+
+@media (max-width: 600px) {
+  .turno__filters { grid-template-columns: 1fr; }
+}

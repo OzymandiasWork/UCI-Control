@@ -13,6 +13,18 @@
 .kpi dt { font-size: 0.8rem; font-weight: 600; color: var(--ink-secondary); }
 .kpi dd { margin: 0; font-family: var(--font-display); font-size: 2.2rem; font-weight: 600; }
 .kpi__sub { font-size: 1.1rem; color: var(--ink-muted); }
+.exec__proyeccion { display: flex; gap: var(--space-2); flex-wrap: wrap; margin: var(--space-3) 0; }
+.exec__trend {
+  display: flex; align-items: flex-end; gap: var(--space-1);
+  height: 120px; margin: var(--space-4) 0 var(--space-6);
+  padding: var(--space-3); background: var(--surface);
+  border: 1px solid var(--border); border-radius: var(--radius);
+}
+.exec__bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; gap: 2px; }
+.exec__bar { width: 100%; max-width: 36px; background: var(--accent); border-radius: 3px 3px 0 0; min-height: 3px; }
+.exec__bar-label { font-size: 0.7rem; color: var(--ink-muted); }
+.exec h2 { margin: var(--space-5) 0 var(--space-2); }
+
 .exec__alerts { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-2); }
 .exec__alerts li {
   display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap;

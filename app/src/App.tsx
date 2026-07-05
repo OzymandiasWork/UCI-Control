@@ -4,6 +4,7 @@ import { LoginPage } from './features/auth/LoginPage'
 import { BoardPage } from './features/board/BoardPage'
 import { PatientPage } from './features/patient/PatientPage'
 import { ExecutivePage } from './features/executive/ExecutivePage'
+import { TurnoPage } from './features/turno/TurnoPage'
 import { ConnectionBanner } from './features/shared/ConnectionBanner'
 import { useSession } from './lib/supabase/useSession'
 
@@ -31,6 +32,7 @@ export default function App() {
         <Route path="/" element={<Protected><BoardPage /></Protected>} />
         <Route path="/box/:boxNumber" element={<Protected><PatientPage /></Protected>} />
         <Route path="/ejecutivo" element={<Protected><ExecutivePage /></Protected>} />
+        <Route path="/turno" element={<Protected><TurnoPage /></Protected>} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>

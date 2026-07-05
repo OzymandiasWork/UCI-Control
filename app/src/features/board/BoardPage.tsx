@@ -50,6 +50,7 @@ export function BoardPage() {
       <header className="board__header">
         <h1>UCI Torre Valech</h1>
         <nav aria-label="Principal">
+          <Link to="/turno">Turno</Link>
           <Link to="/ejecutivo">Resumen ejecutivo</Link>
           <button type="button" className="board__logout" onClick={() => supabase.auth.signOut()}>
             Cerrar sesión

@@ -93,6 +93,23 @@ export interface BloodGas {
   lactato: number | null
 }
 
+export interface ShiftStaff {
+  id: string
+  shift_date: string
+  shift_type: 'Día' | 'Noche'
+  role: string
+  name: string
+  boxes: string
+}
+
+export interface OccupancySnapshot {
+  snap_date: string
+  occupied: number
+  free: number
+  on_vm: number
+  critical: number
+}
+
 /** Stay con sus hijos, como lo devuelve la query del tablero */
 export interface StayFull extends Stay {
   goals: Goal[]
