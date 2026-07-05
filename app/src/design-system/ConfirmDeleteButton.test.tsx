@@ -50,3 +50,16 @@ test('acepta una etiqueta e ícono personalizados para el botón inicial (varian
   render(<ConfirmDeleteButton ariaLabel="Eliminar evento X" confirmText="¿Eliminar?" onConfirm={vi.fn()} idleLabel="✕" />)
   expect(screen.getByRole('button', { name: 'Eliminar evento X' })).toHaveTextContent('✕')
 })
+
+test('al confirmar aparecer, el foco va a "Cancelar" (opción segura por defecto)', async () => {
+  render(<ConfirmDeleteButton ariaLabel="Eliminar Pip/Tazo" confirmText="¿Eliminar Pip/Tazo?" onConfirm={vi.fn()} />)
+  await userEvent.click(screen.getByRole('button', { name: 'Eliminar Pip/Tazo' }))
+  expect(screen.getByRole('button', { name: /cancelar/i })).toHaveFocus()
+})
+
+test('al cancelar, el foco vuelve al botón original (no se pierde)', async () => {
+  render(<ConfirmDeleteButton ariaLabel="Eliminar Pip/Tazo" confirmText="¿Eliminar Pip/Tazo?" onConfirm={vi.fn()} />)
+  await userEvent.click(screen.getByRole('button', { name: 'Eliminar Pip/Tazo' }))
+  await userEvent.click(screen.getByRole('button', { name: /cancelar/i }))
+  expect(screen.getByRole('button', { name: 'Eliminar Pip/Tazo' })).toHaveFocus()
+})

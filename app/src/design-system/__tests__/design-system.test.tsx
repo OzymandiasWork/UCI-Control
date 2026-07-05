@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { useState } from 'react'
+import { createRef, useState } from 'react'
 import { Badge } from '../Badge'
 import { Button } from '../Button'
 import { TextField, SelectField, NumberField } from '../Field'
@@ -14,6 +14,14 @@ test('Badge muestra el texto del estado (no solo color)', () => {
 test('Button expone su nombre accesible', () => {
   render(<Button onClick={() => {}}>Guardar</Button>)
   expect(screen.getByRole('button', { name: 'Guardar' })).toBeInTheDocument()
+})
+
+test('Button reenvía la ref al elemento <button> (necesario para gestión de foco)', () => {
+  const ref = createRef<HTMLButtonElement>()
+  render(<Button ref={ref}>Guardar</Button>)
+  expect(ref.current).toBeInstanceOf(HTMLButtonElement)
+  ref.current?.focus()
+  expect(ref.current).toHaveFocus()
 })
 
 test('TextField asocia label e input', () => {
