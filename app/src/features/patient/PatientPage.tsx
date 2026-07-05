@@ -43,33 +43,35 @@ export function PatientPage() {
         </nav>
       </header>
 
-      <IngresoEgreso boxNumber={n} stay={stay} />
+      <main aria-label={`Detalle del box ${n}`}>
+        <IngresoEgreso boxNumber={n} stay={stay} />
 
-      {stay && (
-        <Tabs
-          label={`Módulos del paciente del box ${n}`}
-          tabs={[
-            { id: 'clinico', label: 'Clínico', content: <TabClinico stay={stay} /> },
-            { id: 'ventilacion', label: 'Ventilación', content: <TabVentilacion stay={stay} /> },
-            { id: 'equipo', label: 'Equipo', content: <TabEquipo stay={stay} /> },
-            { id: 'atb', label: 'ATB', content: <TabATB stay={stay} /> },
-            { id: 'nutricion', label: 'Nutrición', content: <TabNutricion stay={stay} /> },
-            { id: 'sofa', label: 'SOFA', content: <TabSofa stay={stay} /> },
-            { id: 'metas', label: 'Metas', content: <TabMetas stay={stay} /> },
-            { id: 'sugerencias', label: 'Sugerencias', content: <TabSugerencias stay={stay} /> },
-          ]}
-        />
-      )}
+        {stay && (
+          <Tabs
+            label={`Módulos del paciente del box ${n}`}
+            tabs={[
+              { id: 'clinico', label: 'Clínico', content: <TabClinico stay={stay} /> },
+              { id: 'ventilacion', label: 'Ventilación', content: <TabVentilacion stay={stay} /> },
+              { id: 'equipo', label: 'Equipo', content: <TabEquipo stay={stay} /> },
+              { id: 'atb', label: 'ATB', content: <TabATB stay={stay} /> },
+              { id: 'nutricion', label: 'Nutrición', content: <TabNutricion stay={stay} /> },
+              { id: 'sofa', label: 'SOFA', content: <TabSofa stay={stay} /> },
+              { id: 'metas', label: 'Metas', content: <TabMetas stay={stay} /> },
+              { id: 'sugerencias', label: 'Sugerencias', content: <TabSugerencias stay={stay} /> },
+            ]}
+          />
+        )}
 
-      {stay && (
-        <footer className="patient__footer">
-          <Button onClick={() => navigate('/')}>✓ Guardar y volver al tablero</Button>
-          <p className="patient__hint">
-            Tranquilo: cada cambio se guarda solo, al instante. Este botón simplemente te
-            devuelve al tablero.
-          </p>
-        </footer>
-      )}
+        {stay && (
+          <footer className="patient__footer">
+            <Button onClick={() => navigate('/')}>✓ Guardar y volver al tablero</Button>
+            <p className="patient__hint">
+              Tranquilo: cada cambio se guarda solo, al instante. Este botón simplemente te
+              devuelve al tablero.
+            </p>
+          </footer>
+        )}
+      </main>
     </div>
   )
 }

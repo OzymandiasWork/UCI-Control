@@ -67,7 +67,7 @@ export function TabVentilacion({ stay }: { stay: StayFull }) {
   return (
     <div>
       <section aria-labelledby="vent-params">
-        <h3 id="vent-params">🫁 Parámetros ventilatorios</h3>
+        <h2 id="vent-params">🫁 Parámetros ventilatorios</h2>
         <div className="tabgrid">
           <SelectField label="Modo SV" value={v.modo_sv} onChange={x => upd({ modo_sv: x })} options={MODOS_SV} />
           <AutoNumber label="FiO₂ (%)" value={v.fio2} min={21} max={100} onSave={x => upd({ fio2: x })} />
@@ -85,7 +85,7 @@ export function TabVentilacion({ stay }: { stay: StayFull }) {
       </section>
 
       <section aria-labelledby="vent-indices">
-        <h3 id="vent-indices">📊 Índices automáticos</h3>
+        <h2 id="vent-indices">📊 Índices automáticos</h2>
         <div className="vent-indices">
           <Badge tone={pafiC?.tone ?? 'muted'}>
             PAFI {pafiVal ?? '—'}{pafiC ? ` · ${pafiC.label}` : ''}
@@ -109,7 +109,7 @@ export function TabVentilacion({ stay }: { stay: StayFull }) {
       </section>
 
       <section aria-labelledby="vent-ibw">
-        <h3 id="vent-ibw">⚖️ Peso predicho y VT protector (ARDSnet)</h3>
+        <h2 id="vent-ibw">⚖️ Peso predicho y VT protector (ARDSnet)</h2>
         <div className="tabrow">
           <SelectField label="Sexo" value={v.sexo === 'h' ? 'Hombre' : 'Mujer'}
             onChange={x => upd({ sexo: x === 'Hombre' ? 'h' : 'm' })} options={['Hombre', 'Mujer']} />
@@ -132,7 +132,7 @@ export function TabVentilacion({ stay }: { stay: StayFull }) {
       </section>
 
       <section aria-labelledby="vent-gases">
-        <h3 id="vent-gases">🧪 Gases arteriales</h3>
+        <h2 id="vent-gases">🧪 Gases arteriales</h2>
         <div className="tabrow">
           {(['ph', 'pco2', 'po2', 'hco3', 'lactato', 'sat'] as const).map(k => (
             <TextField key={k} label={{ ph: 'pH', pco2: 'PaCO₂', po2: 'PaO₂', hco3: 'HCO₃', lactato: 'Láctico', sat: 'SatO₂ (%)' }[k]}
@@ -175,7 +175,7 @@ export function TabVentilacion({ stay }: { stay: StayFull }) {
       </section>
 
       <section aria-labelledby="vent-weaning">
-        <h3 id="vent-weaning">📈 Weaning / Prueba de ventilación espontánea (SBT)</h3>
+        <h2 id="vent-weaning">📈 Weaning / Prueba de ventilación espontánea (SBT)</h2>
         <div className="tabgrid">
           <AutoNumber label="IRRS (resp/min/L)" value={v.irrs} max={300} onSave={x => upd({ irrs: x })} />
           <AutoNumber label="PIM (cmH₂O)" value={v.pim} min={-120} max={0} onSave={x => upd({ pim: x })} />
@@ -196,7 +196,7 @@ export function TabVentilacion({ stay }: { stay: StayFull }) {
       </section>
 
       <section aria-labelledby="vent-calcs">
-        <h3 id="vent-calcs">🧮 Calculadoras de referencia</h3>
+        <h2 id="vent-calcs">🧮 Calculadoras de referencia</h2>
 
         <details className="vent-calc">
           <summary>📐 ROX Index — predictor fallo VNI / CNAF</summary>

@@ -62,7 +62,7 @@ export function TabClinico({ stay }: { stay: StayFull }) {
       </div>
 
       <section className="tabgrid__full" aria-labelledby="accesos-title">
-        <h3 id="accesos-title">Accesos vasculares</h3>
+        <h2 id="accesos-title">Accesos vasculares</h2>
         {stay.accesses.map(a => (
           <div className="tabrow" key={a.id}>
             <SelectField label="Tipo" value={a.type}

@@ -15,11 +15,11 @@ export function TabSugerencias({ stay }: { stay: StayFull }) {
   return (
     <div>
       <p><Badge tone="proc">Guía: {s.matched}</Badge></p>
-      <h3>Antibióticos sugeridos</h3>
+      <h2>Antibióticos sugeridos</h2>
       <p>{s.atb}</p>
-      <h3>Metas terapéuticas</h3>
+      <h2>Metas terapéuticas</h2>
       <ul>{s.goals.map(g => <li key={g}>{g}</li>)}</ul>
-      <h3>Monitorización</h3>
+      <h2>Monitorización</h2>
       <ul>{s.monitor.map(m => <li key={m}>{m}</li>)}</ul>
       <p className="sugerencias-disclaimer">
         Material de apoyo — no reemplaza el juicio clínico del equipo tratante.
