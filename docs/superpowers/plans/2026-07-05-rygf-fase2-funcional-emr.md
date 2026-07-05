@@ -348,9 +348,16 @@ export const MRC_GROUPS: { key: MrcKey; label: string }[] = [
   { key: 'dors_pie_i', label: 'Dors. Pie I' },
 ]
 
-/** Igual de null-safe que calcSofa: si nada se ha evaluado aún, no hay total. */
+/**
+ * Igual de null-safe que calcSofa: si nada se ha evaluado aún, no hay total.
+ * Lee explícitamente las 12 claves de MRC_GROUPS (no Object.values(s)) porque
+ * este total se calcula tanto desde un MrcScores "puro" (formulario en vivo)
+ * como desde una fila completa de MrcAssessment (historial), que tiene más
+ * campos que los 12 del MRC-SS — Object.values() los incluiría todos y
+ * corrompería la suma (bug real encontrado en code review de la Tarea 5).
+ */
 export function calcMrcTotal(s: MrcScores): number | null {
-  const v = Object.values(s)
+  const v = MRC_GROUPS.map(g => s[g.key])
   if (v.every(x => x === null)) return null
   return v.reduce<number>((a, x) => a + (x ?? 0), 0)
 }
@@ -505,6 +512,11 @@ type FormKey = MrcKey
   | 'fss_icu' | 'ims' | 'handgrip_d' | 'handgrip_i' | 'tiempo_trabajo_min'
   | 'pct_fcr' | 'borg_fuerza' | 'dolor_ena' | 'uma' | 'set_min'
 
+// Campos del formulario que no son parte de los 12 grupos MRC-SS — el guard
+// de guardado necesita revisar también estos, o un usuario que solo llena
+// FSS-ICU/IMS/etc. (sin tocar el MRC-SS) se queda sin poder guardar nada.
+const OTHER_FORM_KEYS = ['fss_icu', 'ims', 'handgrip_d', 'handgrip_i', 'tiempo_trabajo_min', 'pct_fcr', 'borg_fuerza', 'dolor_ena', 'uma', 'set_min'] as const
+
 function emptyForm(): Record<FormKey, string> & { dva_sesion: boolean } {
   return {
     abd_hh_d: '', flex_hh_d: '', ext_mu_d: '', abd_hh_i: '', flex_hh_i: '', ext_mu_i: '',
@@ -525,9 +537,12 @@ export function TabFuncional({ stay }: { stay: StayFull }) {
   ) as MrcScores
   const liveTotal = calcMrcTotal(liveScores)
   const interp = mrcInterp(liveTotal)
+  const liveFilledCount = MRC_GROUPS.filter(g => num(form[g.key]) !== null).length
 
   const save = () => {
-    if (MRC_GROUPS.every(g => form[g.key].trim() === '')) return
+    const allBlank = MRC_GROUPS.every(g => form[g.key].trim() === '')
+      && OTHER_FORM_KEYS.every(k => form[k].trim() === '')
+    if (allBlank) return
     mrc.insert.mutate({
       stay_id: stay.id,
       ...Object.fromEntries(MRC_GROUPS.map(g => [g.key, num(form[g.key])])),
@@ -550,7 +565,10 @@ export function TabFuncional({ stay }: { stay: StayFull }) {
           ))}
         </div>
         <div className="vent-indices">
-          <Badge tone={interp.tone}>MRC-SS {liveTotal ?? '—'} / 60 · {interp.label}</Badge>
+          <Badge tone={interp.tone}>
+            MRC-SS {liveTotal ?? '—'} / 60 · {interp.label}
+            {liveTotal !== null && liveFilledCount < 12 ? ` (${liveFilledCount}/12 grupos evaluados)` : ''}
+          </Badge>
         </div>
       </section>
 
@@ -595,13 +613,17 @@ export function TabFuncional({ stay }: { stay: StayFull }) {
             .map(a => {
               const total = calcMrcTotal(a)
               const i = mrcInterp(total)
+              const filled = MRC_GROUPS.filter(g => a[g.key] !== null).length
               return (
                 <li key={a.id}>
                   <div className="vent-gas-head">
                     <strong>
                       {new Date(a.assessed_at).toLocaleString('es-CL', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}
                     </strong>
-                    <Badge tone={i.tone}>MRC-SS {total ?? '—'} / 60 · {i.label}</Badge>
+                    <Badge tone={i.tone}>
+                      MRC-SS {total ?? '—'} / 60 · {i.label}
+                      {total !== null && filled < 12 ? ` (${filled}/12 grupos evaluados)` : ''}
+                    </Badge>
                     <ConfirmDeleteButton
                       ariaLabel="Eliminar evaluación"
                       confirmText="¿Eliminar esta evaluación MRC-SS?"
