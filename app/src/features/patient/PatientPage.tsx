@@ -14,6 +14,8 @@ import { TabNutricion } from './tabs/TabNutricion'
 import { TabSofa } from './tabs/TabSofa'
 import { TabMetas } from './tabs/TabMetas'
 import { TabSugerencias } from './tabs/TabSugerencias'
+import { TabFuncional } from './tabs/TabFuncional'
+import { TabEMR } from './tabs/TabEMR'
 import './patient.css'
 
 export function PatientPage() {
@@ -58,6 +60,8 @@ export function PatientPage() {
               { id: 'sofa', label: 'SOFA', content: <TabSofa stay={stay} /> },
               { id: 'metas', label: 'Metas', content: <TabMetas stay={stay} /> },
               { id: 'sugerencias', label: 'Sugerencias', content: <TabSugerencias stay={stay} /> },
+              { id: 'funcional', label: 'Funcional', content: <TabFuncional stay={stay} /> },
+              { id: 'emr', label: 'EMR', content: <TabEMR stay={stay} /> },
             ]}
           />
         )}
