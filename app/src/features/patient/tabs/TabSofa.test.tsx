@@ -19,6 +19,7 @@ const base = {
   contacto_tel: '', ultimo_contacto: '', notes: '', enfermera: '', tens: '', kine: '',
   updated_at: '', goals: [], antibiotics: [], accesses: [], nutrition: null,
   vent_settings: null, blood_gases: [],
+  mrc_assessments: [], emr_sessions: [],
 } satisfies Omit<StayFull, 'sofa_assessments'>
 
 test('muestra total y riesgo de la evaluación de hoy', () => {

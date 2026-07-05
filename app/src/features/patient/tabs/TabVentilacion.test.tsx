@@ -19,6 +19,7 @@ const base = {
   contacto_tel: '', ultimo_contacto: '', notes: '', enfermera: '', tens: '', kine: '',
   updated_at: '', goals: [], antibiotics: [], accesses: [], sofa_assessments: [],
   vent_settings: null, blood_gases: [], nutrition: null,
+  mrc_assessments: [], emr_sessions: [],
 } satisfies StayFull
 
 test('editar PaO₂ y FiO₂ seguidos NO pisa el otro con un valor viejo (bug real reproducido en producción)', () => {

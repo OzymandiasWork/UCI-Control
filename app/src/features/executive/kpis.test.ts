@@ -14,6 +14,7 @@ function stay(over: Partial<StayFull>): StayFull {
     enfermera: '', tens: '', kine: '', updated_at: '',
     goals: [], antibiotics: [], accesses: [], nutrition: null, sofa_assessments: [],
     vent_settings: null, blood_gases: [],
+    mrc_assessments: [], emr_sessions: [],
     ...over,
   }
 }

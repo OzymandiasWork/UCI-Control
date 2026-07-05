@@ -93,6 +93,55 @@ export interface BloodGas {
   lactato: number | null
 }
 
+export interface MrcAssessment {
+  id: string
+  stay_id: string
+  assessed_at: string
+  abd_hh_d: number | null
+  flex_hh_d: number | null
+  ext_mu_d: number | null
+  abd_hh_i: number | null
+  flex_hh_i: number | null
+  ext_mu_i: number | null
+  flex_rod_d: number | null
+  ext_rod_d: number | null
+  dors_pie_d: number | null
+  flex_rod_i: number | null
+  ext_rod_i: number | null
+  dors_pie_i: number | null
+  fss_icu: number | null
+  ims: number | null
+  handgrip_d: number | null
+  handgrip_i: number | null
+  tiempo_trabajo_min: number | null
+  pct_fcr: number | null
+  borg_fuerza: number | null
+  dolor_ena: number | null
+  dva_sesion: boolean
+  uma: number | null
+  set_min: number | null
+}
+
+export interface EmrSession {
+  id: string
+  stay_id: string
+  session_at: string
+  session_type: 'fuerza' | 'resistencia'
+  carga_pct: number | null
+  cmh2o: number | null
+  repeticiones: number | null
+  series: number | null
+  minutos: number | null
+  tolerancia: boolean
+  borg: number | null
+  pim_test: number | null
+  pef_test: number | null
+  fraccion_acort_pct: number | null
+  eco_diaf_esp_mm: number | null
+  eco_diaf_ins_mm: number | null
+  notas: string
+}
+
 export interface ShiftStaff {
   id: string
   shift_date: string
@@ -119,4 +168,6 @@ export interface StayFull extends Stay {
   sofa_assessments: SofaAssessment[]
   vent_settings: VentSettings | null
   blood_gases: BloodGas[]
+  mrc_assessments: MrcAssessment[]
+  emr_sessions: EmrSession[]
 }

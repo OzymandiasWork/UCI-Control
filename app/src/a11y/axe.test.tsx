@@ -23,6 +23,7 @@ const stay = {
   ultimo_contacto: '', notes: '', enfermera: '', tens: '', kine: '',
   updated_at: '', goals: [], antibiotics: [], accesses: [], nutrition: null,
   sofa_assessments: [], vent_settings: null, blood_gases: [],
+  mrc_assessments: [], emr_sessions: [],
 } satisfies StayFull
 
 test('LoginPage sin violaciones axe', async () => {

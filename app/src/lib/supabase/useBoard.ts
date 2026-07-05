@@ -9,7 +9,7 @@ const EVENTS_KEY = ['events']
 async function fetchBoard(): Promise<StayFull[]> {
   const { data, error } = await supabase
     .from('stays')
-    .select('*, goals(*), antibiotics(*), accesses(*), nutrition(*), sofa_assessments(*), vent_settings(*), blood_gases(*)')
+    .select('*, goals(*), antibiotics(*), accesses(*), nutrition(*), sofa_assessments(*), vent_settings(*), blood_gases(*), mrc_assessments(*), emr_sessions(*)')
     .eq('active', true)
     .order('box_number')
   if (error) throw error
@@ -82,7 +82,7 @@ export function useDischargeStay() {
 }
 
 /** CRUD genérico de tablas hijas (goals, antibiotics, accesses) */
-export function useChildRow(table: 'goals' | 'antibiotics' | 'accesses' | 'blood_gases') {
+export function useChildRow(table: 'goals' | 'antibiotics' | 'accesses' | 'blood_gases' | 'mrc_assessments' | 'emr_sessions') {
   const qc = useQueryClient()
   const invalidate = () => qc.invalidateQueries({ queryKey: BOARD_KEY })
   return {
