@@ -15,6 +15,7 @@ const stay = {
   updated_at: '', goals: [{ id: 'g1', stay_id: 's1', text: 'meta', done: false, position: 0 }],
   antibiotics: [], accesses: [], nutrition: null,
   sofa_assessments: [{ id: 'a1', stay_id: 's1', assessed_on: today, resp: 3, coag: 1, liver: 0, cardio: 2, neuro: 0, renal: 1 }],
+  vent_settings: null, blood_gases: [],
 } satisfies StayFull
 
 function renderCard(s: StayFull | null, box = 5) {

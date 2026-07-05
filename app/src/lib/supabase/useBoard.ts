@@ -9,7 +9,7 @@ const EVENTS_KEY = ['events']
 async function fetchBoard(): Promise<StayFull[]> {
   const { data, error } = await supabase
     .from('stays')
-    .select('*, goals(*), antibiotics(*), accesses(*), nutrition(*), sofa_assessments(*)')
+    .select('*, goals(*), antibiotics(*), accesses(*), nutrition(*), sofa_assessments(*), vent_settings(*), blood_gases(*)')
     .eq('active', true)
     .order('box_number')
   if (error) throw error
@@ -80,7 +80,7 @@ export function useDischargeStay() {
 }
 
 /** CRUD genérico de tablas hijas (goals, antibiotics, accesses) */
-export function useChildRow(table: 'goals' | 'antibiotics' | 'accesses') {
+export function useChildRow(table: 'goals' | 'antibiotics' | 'accesses' | 'blood_gases') {
   const qc = useQueryClient()
   const invalidate = () => qc.invalidateQueries({ queryKey: BOARD_KEY })
   return {
@@ -114,6 +114,18 @@ export function useUpsertNutrition() {
   return useMutation({
     mutationFn: async (row: { stay_id: string } & Record<string, unknown>) => {
       const { error } = await supabase.from('nutrition').upsert(row)
+      if (error) throw error
+    },
+    onSettled: () => qc.invalidateQueries({ queryKey: BOARD_KEY }),
+  })
+}
+
+/** Parámetros ventilatorios (1:1 con el stay) */
+export function useUpsertVent() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async (row: { stay_id: string } & Record<string, unknown>) => {
+      const { error } = await supabase.from('vent_settings').upsert(row)
       if (error) throw error
     },
     onSettled: () => qc.invalidateQueries({ queryKey: BOARD_KEY }),

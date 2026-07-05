@@ -13,6 +13,7 @@ function stay(over: Partial<StayFull>): StayFull {
     contacto_nombre: '', contacto_tel: '', ultimo_contacto: '', notes: '',
     enfermera: '', tens: '', kine: '', updated_at: '',
     goals: [], antibiotics: [], accesses: [], nutrition: null, sofa_assessments: [],
+    vent_settings: null, blood_gases: [],
     ...over,
   }
 }

@@ -43,3 +43,22 @@
   display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-2);
 }
 .patient__hint { margin: 0; color: var(--ink-secondary); font-size: 0.9rem; }
+
+/* ── Ventilación ── */
+.vent-indices { display: flex; gap: var(--space-2); flex-wrap: wrap; margin: var(--space-3) 0; }
+.vent-hint { color: var(--ink-secondary); font-size: 0.9rem; }
+.vent-alert {
+  border: 1px solid; border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-3); font-size: 0.92rem; margin: var(--space-2) 0;
+}
+.vent-alert--ok     { color: var(--ok-text);     background: var(--ok-tint);     border-color: var(--ok-border); }
+.vent-alert--warn   { color: var(--warn-text);   background: var(--warn-tint);   border-color: var(--warn-border); }
+.vent-alert--danger { color: var(--danger-text); background: var(--danger-tint); border-color: var(--danger-border); }
+.vent-gases { list-style: none; margin: var(--space-3) 0 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-3); }
+.vent-gases > li { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: var(--space-3); background: var(--surface); }
+.vent-gas-head { display: flex; gap: var(--space-3); align-items: center; flex-wrap: wrap; }
+.vent-gas-head span { color: var(--ink-secondary); font-size: 0.9rem; flex: 1; }
+.vent-calc { border: 1px solid var(--border); border-radius: var(--radius-sm); margin-bottom: var(--space-3); padding: var(--space-2) var(--space-3); background: var(--surface); }
+.vent-calc summary { cursor: pointer; font-weight: 600; min-height: var(--tap-min); display: flex; align-items: center; }
+.vent-calc[open] summary { margin-bottom: var(--space-3); }
+section h3 { margin: var(--space-5) 0 var(--space-3); }

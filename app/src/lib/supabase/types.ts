@@ -50,6 +50,49 @@ export interface Nutrition {
 }
 export interface UnitEvent { id: string; time: string; label: string; event_date: string }
 
+export interface VentSettings {
+  stay_id: string
+  modo_sv: string
+  fio2: number
+  spo2: number
+  pao2: number
+  peep: number
+  peep_i: number
+  vt: number
+  pc_ps: number
+  vol_min: number
+  fr_prog: string
+  pplat: number
+  etco2: number
+  vd_vt: number
+  fuga_cuff: number
+  rva: number
+  cest: number
+  sexo: 'h' | 'm'
+  talla_cm: number
+  peso_real: number
+  irrs: number
+  pim: number
+  pef: number
+  rass: number
+  cam_icu: 'neg' | 'pos'
+  sat_ps: number
+  secreciones: 'ok' | 'abund'
+}
+
+export interface BloodGas {
+  id: string
+  stay_id: string
+  drawn_at: string
+  ph: number | null
+  pco2: number | null
+  po2: number | null
+  hco3: number | null
+  be: number | null
+  sat: number | null
+  lactato: number | null
+}
+
 /** Stay con sus hijos, como lo devuelve la query del tablero */
 export interface StayFull extends Stay {
   goals: Goal[]
@@ -57,4 +100,6 @@ export interface StayFull extends Stay {
   accesses: Access[]
   nutrition: Nutrition | null
   sofa_assessments: SofaAssessment[]
+  vent_settings: VentSettings | null
+  blood_gases: BloodGas[]
 }
