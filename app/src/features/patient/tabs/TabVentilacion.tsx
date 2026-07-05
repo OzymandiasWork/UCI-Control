@@ -24,7 +24,11 @@ export function TabVentilacion({ stay }: { stay: StayFull }) {
   const { mutate } = useUpsertVent()
   const gases = useChildRow('blood_gases')
   const v = stay.vent_settings ?? emptyVent(stay.id)
-  const upd = (patch: Partial<VentSettings>) => mutate({ ...v, ...patch, stay_id: stay.id })
+  // Solo se envía el campo que cambió (no todo `v`): con 12+ AutoNumber en este
+  // formulario, un upsert de fila completa pisaría campos que otro AutoNumber
+  // guardó casi al mismo tiempo, porque cada uno captura su propio snapshot
+  // desactualizado de `v` (bug reproducido: PaO₂ se perdía al editar FiO₂ justo después).
+  const upd = (patch: Partial<VentSettings>) => mutate({ stay_id: stay.id, ...patch })
 
   // Índices automáticos (solo con datos suficientes)
   const pafiVal = v.pao2 > 0 && v.fio2 >= 21 ? pafi(v.pao2, v.fio2) : null

@@ -35,3 +35,17 @@ test('seleccionar un puntaje llama al upsert de hoy', async () => {
   await userEvent.click(screen.getByRole('radio', { name: /respiratorio.*≥400/i }))
   expect(upsert).toHaveBeenCalledWith(expect.objectContaining({ stay_id: 's1', resp: 0 }))
 })
+
+test('marcar dos dominios seguidos NO pisa el otro con un valor viejo (regresión)', async () => {
+  // Bug real reproducido en producción: enviar el objeto `scores` completo
+  // (capturado en un closure desactualizado) en cada upsert hacía que el
+  // segundo guardado revirtiera el dominio recién marcado por el primero.
+  render(<TabSofa stay={{ ...base, sofa_assessments: [] }} />)
+  await userEvent.click(screen.getByRole('radio', { name: /respiratorio.*≥400/i }))
+  await userEvent.click(screen.getByRole('radio', { name: /coagulación.*≥150/i }))
+
+  const respCall = upsert.mock.calls.find(([row]) => 'resp' in row)?.[0]
+  const coagCall = upsert.mock.calls.find(([row]) => 'coag' in row)?.[0]
+  expect(respCall).not.toHaveProperty('coag')
+  expect(coagCall).not.toHaveProperty('resp')
+})

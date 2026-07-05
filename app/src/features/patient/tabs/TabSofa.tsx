@@ -14,8 +14,12 @@ export function TabSofa({ stay }: { stay: StayFull }) {
   const total = calcSofa(scores)
   const risk = sofaRisk(total)
 
+  // Solo se envía el dominio que cambió (no todo `scores`): si el usuario marca
+  // dos dominios seguidos antes de que el primer guardado vuelva del servidor,
+  // un upsert de fila completa pisaría el dominio recién guardado con el valor
+  // viejo capturado en este closure.
   function setScore(key: keyof SofaScores, score: number) {
-    mutate({ stay_id: stay.id, ...scores, [key]: score })
+    mutate({ stay_id: stay.id, [key]: score })
   }
 
   return (

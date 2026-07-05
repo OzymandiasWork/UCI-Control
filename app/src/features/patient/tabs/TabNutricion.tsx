@@ -10,7 +10,10 @@ export function TabNutricion({ stay }: { stay: StayFull }) {
   const n = stay.nutrition ?? {
     stay_id: stay.id, nutri_type: 'Ayuno', via: '', cal_meta: 0, cal_real: 0, dias: 0, notes: '',
   }
-  const upd = (patch: Partial<typeof n>) => mutate({ ...n, ...patch, stay_id: stay.id })
+  // Solo se envía el campo que cambió (no todo `n`): un upsert de fila completa
+  // pisaría campos de otros AutoNumber que guardan casi al mismo tiempo,
+  // porque cada uno captura su propio snapshot desactualizado de `n`.
+  const upd = (patch: Partial<typeof n>) => mutate({ stay_id: stay.id, ...patch })
   const pct = n.cal_meta > 0 ? Math.round((n.cal_real / n.cal_meta) * 100) : null
 
   return (
