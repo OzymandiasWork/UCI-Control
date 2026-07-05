@@ -7,6 +7,7 @@ import {
   interpretGas, lactateHigh, rox, roxClass, HACOR_ITEMS, hacorClass,
   berlin, sbtEval, type BerlinPafi,
 } from '../../../lib/clinical/vent'
+import { ConfirmDeleteButton } from '../../../design-system/ConfirmDeleteButton'
 import { useChildRow, useUpsertVent } from '../../../lib/supabase/useBoard'
 import type { StayFull, VentSettings } from '../../../lib/supabase/types'
 import { AutoNumber, AutoText } from '../AutoFields'
@@ -158,8 +159,12 @@ export function TabVentilacion({ stay }: { stay: StayFull }) {
                   <div className="vent-gas-head">
                     <strong>{new Date(g.drawn_at).toLocaleString('es-CL', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}</strong>
                     <span>pH {g.ph ?? '—'} · PaCO₂ {g.pco2 ?? '—'} · PaO₂ {g.po2 ?? '—'} · HCO₃ {g.hco3 ?? '—'} · Láctico {g.lactato ?? '—'}</span>
-                    <button type="button" className="agenda__del" aria-label="Eliminar gas"
-                      onClick={() => gases.remove.mutate(g.id)}>✕</button>
+                    <ConfirmDeleteButton
+                      ariaLabel="Eliminar gas"
+                      confirmText="¿Eliminar este gas arterial?"
+                      idleLabel="✕"
+                      idleClassName="agenda__del"
+                      onConfirm={() => gases.remove.mutate(g.id)} />
                   </div>
                   {interp && <p className="vent-hint">{interp.texto} {interp.accion}</p>}
                   {g.lactato !== null && lactateHigh(g.lactato) && (

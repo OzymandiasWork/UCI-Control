@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Badge } from '../../design-system/Badge'
 import { Button } from '../../design-system/Button'
+import { ConfirmDeleteButton } from '../../design-system/ConfirmDeleteButton'
 import { SelectField } from '../../design-system/Field'
 import { AutoText } from '../patient/AutoFields'
 import { ROLES_TURNO, TURNOS, nurseLoad } from '../../lib/clinical/staffing'
@@ -68,8 +69,11 @@ export function TurnoPage() {
                 onSave={v => update.mutate({ id: s.id, patch: { name: v } })} />
               <AutoText label="Boxes asignados" value={s.boxes}
                 onSave={v => update.mutate({ id: s.id, patch: { boxes: v } })} />
-              <Button variant="secondary" aria-label={`Quitar a ${s.name || 'persona sin nombre'} del turno`}
-                onClick={() => remove.mutate(s.id)}>Quitar</Button>
+              <ConfirmDeleteButton
+                ariaLabel={`Quitar a ${s.name || 'persona sin nombre'} del turno`}
+                confirmText={`¿Quitar a ${s.name || 'esta persona'} del turno?`}
+                idleLabel="Quitar"
+                onConfirm={() => remove.mutate(s.id)} />
             </div>
           ))}
           {staff.length === 0 && !isLoading && (

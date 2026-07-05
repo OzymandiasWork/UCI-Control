@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Button } from '../../design-system/Button'
+import { ConfirmDeleteButton } from '../../design-system/ConfirmDeleteButton'
 import { TextField } from '../../design-system/Field'
 import { useEventMutations, useEvents } from '../../lib/supabase/useEvents'
 
@@ -17,9 +18,12 @@ export function AgendaPanel() {
           <li key={e.id}>
             <span className="agenda__time">{e.time}</span>
             <span className="agenda__label">{e.label}</span>
-            <button type="button" className="agenda__del"
-              aria-label={`Eliminar evento ${e.label}`}
-              onClick={() => remove.mutate(e.id)}>✕</button>
+            <ConfirmDeleteButton
+              ariaLabel={`Eliminar evento ${e.label}`}
+              confirmText={`¿Eliminar "${e.label}"?`}
+              idleLabel="✕"
+              idleClassName="agenda__del"
+              onConfirm={() => remove.mutate(e.id)} />
           </li>
         ))}
         {events.length === 0 && <li className="agenda__empty">Sin eventos hoy</li>}

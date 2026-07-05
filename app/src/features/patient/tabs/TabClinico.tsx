@@ -1,5 +1,6 @@
 import { Badge } from '../../../design-system/Badge'
 import { Button } from '../../../design-system/Button'
+import { ConfirmDeleteButton } from '../../../design-system/ConfirmDeleteButton'
 import { SelectField } from '../../../design-system/Field'
 import { ACCESS_TYPES, ALERT_TYPES, PREVISIONES, RESIDENTES, VM_MODES, type AlertKey } from '../../../lib/clinical/constants'
 import { useChildRow, useUpdateStay } from '../../../lib/supabase/useBoard'
@@ -70,8 +71,10 @@ export function TabClinico({ stay }: { stay: StayFull }) {
               options={ACCESS_TYPES} />
             <AutoNumber label="Días" value={a.day}
               onSave={v => accesses.update.mutate({ id: a.id, patch: { day: v } })} />
-            <Button variant="secondary" aria-label={`Eliminar acceso ${a.type}`}
-              onClick={() => accesses.remove.mutate(a.id)}>Eliminar</Button>
+            <ConfirmDeleteButton
+              ariaLabel={`Eliminar acceso ${a.type}`}
+              confirmText={`¿Eliminar el acceso ${a.type}?`}
+              onConfirm={() => accesses.remove.mutate(a.id)} />
           </div>
         ))}
         <Button variant="secondary"

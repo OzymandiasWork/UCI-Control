@@ -1,4 +1,5 @@
 import { Button } from '../../../design-system/Button'
+import { ConfirmDeleteButton } from '../../../design-system/ConfirmDeleteButton'
 import { useChildRow } from '../../../lib/supabase/useBoard'
 import type { StayFull } from '../../../lib/supabase/types'
 import { AutoText } from '../AutoFields'
@@ -16,8 +17,10 @@ export function TabMetas({ stay }: { stay: StayFull }) {
               aria-label={`Meta cumplida: ${g.text || 'sin texto'}`} />
             <AutoText label={`Meta ${i + 1}`} value={g.text}
               onSave={v => goals.update.mutate({ id: g.id, patch: { text: v } })} />
-            <Button variant="secondary" aria-label={`Eliminar meta ${g.text || 'sin texto'}`}
-              onClick={() => goals.remove.mutate(g.id)}>Eliminar</Button>
+            <ConfirmDeleteButton
+              ariaLabel={`Eliminar meta ${g.text || 'sin texto'}`}
+              confirmText={`¿Eliminar la meta "${g.text || 'sin texto'}"?`}
+              onConfirm={() => goals.remove.mutate(g.id)} />
           </li>
         ))}
       </ul>

@@ -1,5 +1,6 @@
 import { Badge } from '../../../design-system/Badge'
 import { Button } from '../../../design-system/Button'
+import { ConfirmDeleteButton } from '../../../design-system/ConfirmDeleteButton'
 import { useChildRow } from '../../../lib/supabase/useBoard'
 import type { StayFull } from '../../../lib/supabase/types'
 import { AutoNumber, AutoText } from '../AutoFields'
@@ -15,8 +16,10 @@ export function TabATB({ stay }: { stay: StayFull }) {
           <AutoNumber label="Día de tratamiento" value={a.day}
             onSave={v => atb.update.mutate({ id: a.id, patch: { day: v } })} />
           {a.day >= 7 && <Badge tone="warn">≥7 días — evaluar suspensión</Badge>}
-          <Button variant="secondary" aria-label={`Eliminar ${a.drug || 'antibiótico'}`}
-            onClick={() => atb.remove.mutate(a.id)}>Eliminar</Button>
+          <ConfirmDeleteButton
+            ariaLabel={`Eliminar ${a.drug || 'antibiótico'}`}
+            confirmText={`¿Eliminar ${a.drug || 'este antibiótico'}?`}
+            onConfirm={() => atb.remove.mutate(a.id)} />
         </div>
       ))}
       {stay.antibiotics.length === 0 && <p>Sin antibióticos registrados.</p>}
