@@ -1,24 +1,33 @@
-import type { ReactNode } from 'react'
+import { lazy, Suspense, type ReactNode } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { LoginPage } from './features/auth/LoginPage'
-import { BoardPage } from './features/board/BoardPage'
-import { PatientPage } from './features/patient/PatientPage'
-import { ExecutivePage } from './features/executive/ExecutivePage'
-import { TurnoPage } from './features/turno/TurnoPage'
 import { ConnectionBanner } from './features/shared/ConnectionBanner'
 import { useSession } from './lib/supabase/useSession'
 
+// Code-splitting por ruta: quien solo ve /login (sin sesión, o mientras
+// carga) no debería descargar el tablero, las 8 pestañas del paciente,
+// GSAP, etc. Reduce el peso de la primera carga — importa en redes de
+// hospital/datos móviles, que es donde vive esta app.
+const BoardPage = lazy(() => import('./features/board/BoardPage').then(m => ({ default: m.BoardPage })))
+const PatientPage = lazy(() => import('./features/patient/PatientPage').then(m => ({ default: m.PatientPage })))
+const ExecutivePage = lazy(() => import('./features/executive/ExecutivePage').then(m => ({ default: m.ExecutivePage })))
+const TurnoPage = lazy(() => import('./features/turno/TurnoPage').then(m => ({ default: m.TurnoPage })))
+
+function PageFallback() {
+  return <p role="status">Cargando…</p>
+}
+
 function Protected({ children }: { children: ReactNode }) {
   const { session, loading } = useSession()
-  if (loading) return <p role="status">Cargando…</p>
+  if (loading) return <PageFallback />
   if (!session) return <Navigate to="/login" replace />
-  return <>{children}</>
+  return <Suspense fallback={<PageFallback />}>{children}</Suspense>
 }
 
 /** Con sesión activa, /login redirige al tablero (incluye el instante post-login). */
 function LoginRoute() {
   const { session, loading } = useSession()
-  if (loading) return <p role="status">Cargando…</p>
+  if (loading) return <PageFallback />
   if (session) return <Navigate to="/" replace />
   return <LoginPage />
 }
