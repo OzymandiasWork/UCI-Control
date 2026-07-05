@@ -60,3 +60,35 @@ test('borrar una evaluación del historial pide confirmación antes de llamar a 
   await userEvent.click(screen.getByRole('button', { name: 'Confirmar' }))
   expect(childRow.remove.mutate).toHaveBeenCalledWith('m1')
 })
+
+test('guardar con solo un campo no-MRC lleno (ej. FSS-ICU) SÍ guarda, no se bloquea', async () => {
+  render(<TabFuncional stay={base} />)
+  fireEvent.change(screen.getByLabelText('FSS-ICU (/35)'), { target: { value: '14' } })
+  await userEvent.click(screen.getByRole('button', { name: /guardar evaluación/i }))
+  expect(childRow.insert.mutate).toHaveBeenCalledWith(
+    expect.objectContaining({ stay_id: 's1', fss_icu: 14, abd_hh_d: null }),
+  )
+})
+
+test('el badge muestra cuántos grupos se evaluaron cuando la evaluación está incompleta', () => {
+  render(<TabFuncional stay={base} />)
+  fireEvent.change(screen.getByLabelText('Abd. HH D'), { target: { value: '5' } })
+  fireEvent.change(screen.getByLabelText('Flex. HH D'), { target: { value: '5' } })
+  expect(screen.getByText(/2\/12 grupos evaluados/)).toBeInTheDocument()
+})
+
+test('el historial muestra el total y la interpretación correctos para una evaluación completa, sin caveat de incompletitud', () => {
+  const stayWithHistory: StayFull = {
+    ...base,
+    mrc_assessments: [{
+      id: 'm1', stay_id: 's1', assessed_at: '2026-07-01T10:00:00Z',
+      abd_hh_d: 3, flex_hh_d: 3, ext_mu_d: 3, abd_hh_i: 3, flex_hh_i: 3, ext_mu_i: 3,
+      flex_rod_d: 3, ext_rod_d: 3, dors_pie_d: 3, flex_rod_i: 3, ext_rod_i: 3, dors_pie_i: 3,
+      fss_icu: 14, ims: 4, handgrip_d: null, handgrip_i: null, tiempo_trabajo_min: null,
+      pct_fcr: null, borg_fuerza: null, dolor_ena: null, dva_sesion: false, uma: null, set_min: null,
+    }],
+  }
+  render(<TabFuncional stay={stayWithHistory} />)
+  expect(screen.getByText(/MRC-SS 36 \/ 60 · Debilidad adquirida leve/)).toBeInTheDocument()
+  expect(screen.queryByText(/grupos evaluados/)).not.toBeInTheDocument()
+})

@@ -30,6 +30,15 @@ describe('calcMrcTotal', () => {
     const s = Object.fromEntries(MRC_GROUPS.map(g => [g.key, 5])) as MrcScores
     expect(calcMrcTotal(s)).toBe(60)
   })
+
+  test('es seguro si se le pasa un objeto con campos extra (ej. una fila completa de MrcAssessment)', () => {
+    const withExtras = {
+      ...Object.fromEntries(MRC_GROUPS.map(g => [g.key, 3])),
+      id: 'm1', stay_id: 's1', assessed_at: '2026-07-01T10:00:00Z',
+      fss_icu: 14, ims: 4, dva_sesion: false,
+    } as unknown as MrcScores
+    expect(calcMrcTotal(withExtras)).toBe(36)
+  })
 })
 
 describe('mrcInterp', () => {

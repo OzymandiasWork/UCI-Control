@@ -27,7 +27,7 @@ export const MRC_GROUPS: { key: MrcKey; label: string }[] = [
 
 /** Igual de null-safe que calcSofa: si nada se ha evaluado aún, no hay total. */
 export function calcMrcTotal(s: MrcScores): number | null {
-  const v = Object.values(s)
+  const v = MRC_GROUPS.map(g => s[g.key])
   if (v.every(x => x === null)) return null
   return v.reduce<number>((a, x) => a + (x ?? 0), 0)
 }
