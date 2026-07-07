@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Badge } from '../../design-system/Badge'
-import { ALERT_TYPES } from '../../lib/clinical/constants'
+import { ALERT_TYPES, DESTINO_TIPOS } from '../../lib/clinical/constants'
 import { sofaRisk } from '../../lib/clinical/sofa'
 import { staySofaToday } from '../../lib/supabase/derive'
 import type { StayFull } from '../../lib/supabase/types'
@@ -34,6 +34,7 @@ export function BoxCard({ boxNumber, stay }: { boxNumber: number; stay: StayFull
         <Badge tone={stay.goals.length > 0 && goalsDone === stay.goals.length ? 'ok' : 'muted'}>
           Metas {goalsDone}/{stay.goals.length}
         </Badge>
+        {stay.destino_tipo !== '' && <Badge tone="muted">{DESTINO_TIPOS[stay.destino_tipo]}</Badge>}
       </div>
     </Link>
   )

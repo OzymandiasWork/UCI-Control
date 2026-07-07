@@ -34,3 +34,13 @@ test('box libre se anuncia como cama libre', () => {
   renderCard(null, 7)
   expect(screen.getByText(/cama libre/i)).toBeInTheDocument()
 })
+
+test('con destino_tipo marcado, la tarjeta muestra el badge del destino', () => {
+  renderCard(baseStay({ destino_tipo: 'fallecido', patient_name: 'X' }))
+  expect(screen.getByText('✝ Fallecido')).toBeInTheDocument()
+})
+
+test('sin destino_tipo no hay badge de destino', () => {
+  renderCard(baseStay({ patient_name: 'X' }))
+  expect(screen.queryByText(/Destino —/)).not.toBeInTheDocument()
+})
