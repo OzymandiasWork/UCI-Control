@@ -7,18 +7,9 @@ vi.mock('../../../lib/supabase/useBoard', () => ({
 }))
 
 import { TabNutricion } from './TabNutricion'
-import type { StayFull } from '../../../lib/supabase/types'
+import { baseStay } from '../../../test/fixtures'
 
-const base = {
-  id: 's1', box_number: 1, active: true, patient_name: '', record_number: '',
-  diagnosis: '', alert: 'none', residente: '', destination: '', dias_hosp: 0,
-  dias_vm: 0, vm_mode: '—', rcp: 'Sí', alergias: '', prevision: 'Fonasa A',
-  consentimiento: false, balance_meta: '', balance_real: '', contacto_nombre: '',
-  contacto_tel: '', ultimo_contacto: '', notes: '', enfermera: '', tens: '', kine: '',
-  updated_at: '', goals: [], antibiotics: [], accesses: [], sofa_assessments: [],
-  vent_settings: null, blood_gases: [], nutrition: null,
-  mrc_assessments: [], emr_sessions: [],
-} satisfies StayFull
+const base = baseStay()
 
 test('editar dos campos de calorías seguidos NO pisa el otro con un valor viejo (regresión)', () => {
   // Mismo bug que en SOFA/Ventilación: `upd` enviaba `{...n, ...patch}` con un

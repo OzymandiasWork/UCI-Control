@@ -8,19 +8,10 @@ vi.mock('../../../lib/supabase/useBoard', () => ({
 
 import userEvent from '@testing-library/user-event'
 import { TabSofa } from './TabSofa'
-import type { StayFull } from '../../../lib/supabase/types'
+import { baseStay } from '../../../test/fixtures'
 
 const today = new Date().toISOString().slice(0, 10)
-const base = {
-  id: 's1', box_number: 1, active: true, patient_name: '', record_number: '',
-  diagnosis: '', alert: 'none', residente: '', destination: '', dias_hosp: 0,
-  dias_vm: 0, vm_mode: '—', rcp: 'Sí', alergias: '', prevision: 'Fonasa A',
-  consentimiento: false, balance_meta: '', balance_real: '', contacto_nombre: '',
-  contacto_tel: '', ultimo_contacto: '', notes: '', enfermera: '', tens: '', kine: '',
-  updated_at: '', goals: [], antibiotics: [], accesses: [], nutrition: null,
-  vent_settings: null, blood_gases: [],
-  mrc_assessments: [], emr_sessions: [],
-} satisfies Omit<StayFull, 'sofa_assessments'>
+const base = baseStay()
 
 test('muestra total y riesgo de la evaluación de hoy', () => {
   render(<TabSofa stay={{
