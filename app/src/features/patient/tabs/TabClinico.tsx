@@ -2,7 +2,7 @@ import { Badge } from '../../../design-system/Badge'
 import { Button } from '../../../design-system/Button'
 import { ConfirmDeleteButton } from '../../../design-system/ConfirmDeleteButton'
 import { SelectField } from '../../../design-system/Field'
-import { ACCESS_TYPES, ALERT_TYPES, PREVISIONES, RESIDENTES, VM_MODES, type AlertKey } from '../../../lib/clinical/constants'
+import { ACCESS_TYPES, ALERT_TYPES, DESTINO_TIPOS, OTHER_ACCESS_TYPES, PREVISIONES, RESIDENTES, VM_MODES, type AlertKey, type DestinoKey } from '../../../lib/clinical/constants'
 import { useChildRow, useUpdateStay } from '../../../lib/supabase/useBoard'
 import type { StayFull } from '../../../lib/supabase/types'
 import { AutoNumber, AutoText } from '../AutoFields'
@@ -13,6 +13,12 @@ export function TabClinico({ stay }: { stay: StayFull }) {
   const { mutate } = useUpdateStay()
   const upd = (patch: Partial<StayFull>) => mutate({ id: stay.id, patch })
   const accesses = useChildRow('accesses')
+
+  // Misma tabla accesses para ambas secciones: se agrupa por catálogo del tipo,
+  // así ninguna fila existente se migra ni se mueve.
+  const OTROS = OTHER_ACCESS_TYPES as readonly string[]
+  const vasculares = stay.accesses.filter(a => !OTROS.includes(a.type))
+  const otros = stay.accesses.filter(a => OTROS.includes(a.type))
 
   return (
     <div className="tabgrid">
@@ -31,8 +37,20 @@ export function TabClinico({ stay }: { stay: StayFull }) {
         options={ALERT_LABELS} />
       <SelectField label="Residente" value={stay.residente || RESIDENTES[0]}
         onChange={v => upd({ residente: v })} options={RESIDENTES} />
-      <AutoText label="Destino" value={stay.destination}
-        onSave={v => upd({ destination: v })} />
+      <SelectField label="Destino" value={DESTINO_TIPOS[stay.destino_tipo]}
+        onChange={v => {
+          const key = (Object.keys(DESTINO_TIPOS) as DestinoKey[])
+            .find(k => DESTINO_TIPOS[k] === v)
+          if (key !== undefined) upd({ destino_tipo: key })
+        }}
+        options={Object.values(DESTINO_TIPOS)} />
+      <div>
+        <AutoText label="Detalle destino (texto libre)" value={stay.destination}
+          onSave={v => upd({ destination: v })} />
+        {stay.destino_tipo === 'traslado' && (
+          <p className="vent-hint">Sigla del centro, ej. HSJD</p>
+        )}
+      </div>
       <AutoNumber label="Días hospitalización" value={stay.dias_hosp}
         onSave={v => upd({ dias_hosp: v })} />
       <AutoNumber label="Días VM" value={stay.dias_vm}
@@ -43,6 +61,8 @@ export function TabClinico({ stay }: { stay: StayFull }) {
         onChange={v => upd({ rcp: v })} options={['Sí', 'No']} />
       <AutoText label="Alergias" value={stay.alergias}
         onSave={v => upd({ alergias: v })} />
+      <AutoText label="Enfermedades de base / Comorbilidades" value={stay.comorbilidades}
+        onSave={v => upd({ comorbilidades: v })} />
       <SelectField label="Previsión" value={stay.prevision}
         onChange={v => upd({ prevision: v })} options={PREVISIONES} />
       <SelectField label="Consentimiento informado" value={stay.consentimiento ? 'Sí' : 'No'}
@@ -64,7 +84,7 @@ export function TabClinico({ stay }: { stay: StayFull }) {
 
       <section className="tabgrid__full" aria-labelledby="accesos-title">
         <h2 id="accesos-title">Accesos vasculares</h2>
-        {stay.accesses.map(a => (
+        {vasculares.map(a => (
           <div className="tabrow" key={a.id}>
             <SelectField label="Tipo" value={a.type}
               onChange={v => accesses.update.mutate({ id: a.id, patch: { type: v } })}
@@ -81,7 +101,29 @@ export function TabClinico({ stay }: { stay: StayFull }) {
           onClick={() => accesses.insert.mutate({ stay_id: stay.id, type: 'CVC', day: 0 })}>
           + Agregar acceso
         </Button>
-        {stay.accesses.length === 0 && <p><Badge tone="muted">Sin accesos registrados</Badge></p>}
+        {vasculares.length === 0 && <p><Badge tone="muted">Sin accesos registrados</Badge></p>}
+      </section>
+
+      <section className="tabgrid__full" aria-labelledby="otros-accesos-title">
+        <h2 id="otros-accesos-title">Otros accesos</h2>
+        {otros.map(a => (
+          <div className="tabrow" key={a.id}>
+            <SelectField label="Tipo" value={a.type}
+              onChange={v => accesses.update.mutate({ id: a.id, patch: { type: v } })}
+              options={OTHER_ACCESS_TYPES} />
+            <AutoNumber label="Días" value={a.day}
+              onSave={v => accesses.update.mutate({ id: a.id, patch: { day: v } })} />
+            <ConfirmDeleteButton
+              ariaLabel={`Eliminar acceso ${a.type}`}
+              confirmText={`¿Eliminar el acceso ${a.type}?`}
+              onConfirm={() => accesses.remove.mutate(a.id)} />
+          </div>
+        ))}
+        <Button variant="secondary"
+          onClick={() => accesses.insert.mutate({ stay_id: stay.id, type: 'Sonda urinaria (Foley)', day: 0 })}>
+          + Agregar otro acceso
+        </Button>
+        {otros.length === 0 && <p><Badge tone="muted">Sin otros accesos registrados</Badge></p>}
       </section>
     </div>
   )
