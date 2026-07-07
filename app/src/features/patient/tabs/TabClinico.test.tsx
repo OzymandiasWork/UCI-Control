@@ -23,6 +23,12 @@ test('cambiar el destino guarda SOLO destino_tipo (patch parcial, anti-clobberin
   expect(updateStay).toHaveBeenCalledWith({ id: 's1', patch: { destino_tipo: 'traslado' } })
 })
 
+test('resetear el destino a "Destino —" guarda destino_tipo vacío (protege el guard !== undefined)', async () => {
+  render(<TabClinico stay={baseStay({ destino_tipo: 'traslado' })} />)
+  await userEvent.selectOptions(screen.getByLabelText('Destino'), 'Destino —')
+  expect(updateStay).toHaveBeenCalledWith({ id: 's1', patch: { destino_tipo: '' } })
+})
+
 test('el hint de sigla del centro aparece solo con destino traslado', () => {
   const { rerender } = render(<TabClinico stay={baseStay()} />)
   expect(screen.queryByText(/Sigla del centro/)).not.toBeInTheDocument()

@@ -522,7 +522,7 @@ Expected: PASS (6 tests).
 
 - [ ] **Step 5: Suite completa + commit**
 
-Run: `cd app && npm test` — Expected: verde (146 + 6 = 152). Nota: `axe.test.tsx` renderiza componentes reales — si el test de accesibilidad cubre TabClinico y fallara por el `<div>` envolvente del detalle, revisar jerarquía (no debería: es un div simple dentro del grid).
+Run: `cd app && npm test` — Expected: verde (146 + 6 = 152). Nota: `axe.test.tsx` NO renderiza TabClinico (solo LoginPage y BoxCard), así que este cambio no lo afecta; la validación de accesibilidad de esta pestaña queda en manos del Lighthouse manual del Task 7.
 
 ```bash
 git add app/src/features/patient/tabs/TabClinico.tsx app/src/features/patient/tabs/TabClinico.test.tsx
