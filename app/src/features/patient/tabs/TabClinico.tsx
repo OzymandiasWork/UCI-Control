@@ -41,6 +41,8 @@ export function TabClinico({ stay }: { stay: StayFull }) {
         onChange={v => {
           const key = (Object.keys(DESTINO_TIPOS) as DestinoKey[])
             .find(k => DESTINO_TIPOS[k] === v)
+          // !== undefined, no truthiness: '' ("Destino —") es una clave válida
+          // y resetear a ella debe guardar destino_tipo: '' (no ignorarse).
           if (key !== undefined) upd({ destino_tipo: key })
         }}
         options={Object.values(DESTINO_TIPOS)} />
