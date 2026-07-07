@@ -47,6 +47,8 @@ export function ExecutivePage() {
           <div className="kpi"><dt>Críticos</dt><dd data-kpi>{k.critical}</dd></div>
           <div className="kpi"><dt>Fin de vida / procuración</dt><dd data-kpi>{k.eol}</dd></div>
           <div className="kpi"><dt>Egresables</dt><dd data-kpi>{k.dischargeable}</dd></div>
+          <div className="kpi"><dt>→ Traslado</dt><dd data-kpi>{k.traslados}</dd></div>
+          <div className="kpi"><dt>Fallecidos</dt><dd data-kpi>{k.fallecidos}</dd></div>
         </dl>
 
         <section aria-labelledby="exec-camas">

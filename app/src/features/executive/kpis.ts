@@ -12,6 +12,8 @@ export function boardKpis(stays: StayFull[]) {
     onVM: stays.filter(s => s.dias_vm > 0).length,
     critical: stays.filter(s => s.alert === 'critical').length,
     eol: stays.filter(s => s.alert === 'eol' || s.alert === 'procurement').length,
-    dischargeable: stays.filter(s => s.destination.toLowerCase().includes('egreso')).length,
+    dischargeable: stays.filter(s => s.destino_tipo === 'egreso' || s.destination.toLowerCase().includes('egreso')).length,
+    traslados: stays.filter(s => s.destino_tipo === 'traslado').length,
+    fallecidos: stays.filter(s => s.destino_tipo === 'fallecido').length,
   }
 }

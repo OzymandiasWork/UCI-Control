@@ -43,4 +43,24 @@ describe('boardKpis', () => {
     expect(k.eol).toBe(2)
     expect(k.dischargeable).toBe(1)
   })
+
+  test('traslados y fallecidos cuentan por destino_tipo', () => {
+    const k = boardKpis([
+      stay({ destino_tipo: 'traslado' }),
+      stay({ box_number: 2, destino_tipo: 'traslado' }),
+      stay({ box_number: 3, destino_tipo: 'fallecido' }),
+      stay({ box_number: 4 }),
+    ])
+    expect(k.traslados).toBe(2)
+    expect(k.fallecidos).toBe(1)
+  })
+
+  test('egresables reconoce el destino estructurado además del texto libre existente', () => {
+    const k = boardKpis([
+      stay({ destino_tipo: 'egreso' }),
+      stay({ box_number: 2, destination: 'Egreso a sala' }),
+      stay({ box_number: 3 }),
+    ])
+    expect(k.dischargeable).toBe(2)
+  })
 })
