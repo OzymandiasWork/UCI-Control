@@ -4,6 +4,7 @@ import { Badge } from '../../design-system/Badge'
 import { Button } from '../../design-system/Button'
 import { ConfirmDeleteButton } from '../../design-system/ConfirmDeleteButton'
 import { SelectField } from '../../design-system/Field'
+import { ThemeToggle } from '../../design-system/ThemeToggle'
 import { AutoText } from '../patient/AutoFields'
 import { ROLES_TURNO, TURNOS, nurseLoad } from '../../lib/clinical/staffing'
 import { useBoard } from '../../lib/supabase/useBoard'
@@ -28,6 +29,7 @@ export function TurnoPage() {
       <header className="turno__header">
         <Link to="/" className="patient__back">← Tablero</Link>
         <h1>Roles del turno</h1>
+        <ThemeToggle />
       </header>
 
       <div className="turno__filters">

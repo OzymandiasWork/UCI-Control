@@ -1,4 +1,6 @@
 :root {
+  color-scheme: light;
+
   /* Superficie */
   --bg: #FAF9F5;
   --surface: #FFFFFF;
@@ -13,8 +15,13 @@
 
   /* Acento Claude */
   --accent: #D97757;          /* gráficos, bordes, foco (3:1 sobre --bg) */
-  --accent-strong: #A8452C;   /* texto interactivo y botones (AA sobre claro) */
+  --accent-strong: #A8452C;   /* texto interactivo (AA sobre claro) */
   --accent-tint: #FBEDE7;
+
+  /* Botones sólidos: el fondo cambia por tema para que su texto mantenga AA */
+  --button-bg: #A8452C;    --button-ink: #FFFFFF;
+  --danger-solid: #A40E26; /* fondo de botones destructivos, texto blanco AA */
+  --pulse-glow: rgba(164, 14, 38, 0.45); /* halo de tarjetas críticas */
 
   /* Estados clínicos: texto AA sobre su tinte */
   --ok-text: #1A7F37;      --ok-tint: #DAFBE1;      --ok-border: #1A7F37;
@@ -40,4 +47,40 @@
   /* Foco */
   --focus-ring: 2px solid var(--accent);
   --focus-offset: 2px;
+}
+
+/* ── Tema oscuro ──────────────────────────────────────────────────
+   Paleta del dashboard del Dr. Arteaga (prototipo UCI_Dashboard.html,
+   estilo GitHub-dark): mismos pares texto/tinte que el equipo ya conoce.
+   Todos los pares texto-sobre-tinte mantienen contraste AA. */
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --bg: #0d1117;
+  --surface: #161b22;
+  --surface-raised: #1c2230;
+  --border: #21262d;
+  --border-strong: #30363d;
+
+  --ink: #e6edf3;
+  --ink-secondary: #9aa4af;
+  --ink-muted: #8b949e;
+
+  --accent: #D97757;
+  --accent-strong: #E5967A;  /* texto interactivo, aclarado para AA sobre oscuro */
+  --accent-tint: #2b1a12;
+
+  --button-bg: #D97757;    --button-ink: #1A1915;
+  --danger-solid: #da3633;
+  --pulse-glow: rgba(218, 54, 51, 0.55);
+
+  --ok-text: #56d364;      --ok-tint: #1a3a22;      --ok-border: #2ea043;
+  --warn-text: #e3b341;    --warn-tint: #3a2e0a;    --warn-border: #d29922;
+  --danger-text: #ff7b72;  --danger-tint: #3a1010;  --danger-border: #da3633;
+  --eol-text: #d2a8ff;     --eol-tint: #261449;     --eol-border: #6e40c9;
+  --proc-text: #79c0ff;    --proc-tint: #0d2845;    --proc-border: #1f6feb;
+  --trial-text: #5eead4;   --trial-tint: #042f2e;   --trial-border: #0d9488;
+
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.5), 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-raised: 0 4px 16px rgba(0, 0, 0, 0.6);
 }

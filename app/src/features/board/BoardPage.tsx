@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { SelectField, TextField } from '../../design-system/Field'
+import { ThemeToggle } from '../../design-system/ThemeToggle'
 import { ALERT_TYPES, BOX_COUNT, RESIDENTES } from '../../lib/clinical/constants'
 import { supabase } from '../../lib/supabase/client'
 import { useBoard } from '../../lib/supabase/useBoard'
@@ -52,6 +53,7 @@ export function BoardPage() {
         <nav aria-label="Principal">
           <Link to="/turno">Turno</Link>
           <Link to="/ejecutivo">Resumen ejecutivo</Link>
+          <ThemeToggle />
           <button type="button" className="board__logout" onClick={() => supabase.auth.signOut()}>
             Cerrar sesión
           </button>

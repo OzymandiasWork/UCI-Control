@@ -3,6 +3,7 @@ import { useIsMutating } from '@tanstack/react-query'
 import { Badge } from '../../design-system/Badge'
 import { Button } from '../../design-system/Button'
 import { Tabs } from '../../design-system/Tabs'
+import { ThemeToggle } from '../../design-system/ThemeToggle'
 import { ALERT_TYPES, BOX_COUNT } from '../../lib/clinical/constants'
 import { useBoard } from '../../lib/supabase/useBoard'
 import { IngresoEgreso } from './IngresoEgreso'
@@ -42,6 +43,7 @@ export function PatientPage() {
         <nav className="patient__nav" aria-label="Navegar entre boxes">
           {n > 1 && <Link to={`/box/${n - 1}`}>← Box {n - 1}</Link>}
           {n < BOX_COUNT && <Link to={`/box/${n + 1}`}>Box {n + 1} →</Link>}
+          <ThemeToggle />
         </nav>
       </header>
 

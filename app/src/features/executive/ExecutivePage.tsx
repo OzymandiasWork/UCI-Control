@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { Badge } from '../../design-system/Badge'
+import { ThemeToggle } from '../../design-system/ThemeToggle'
 import { ALERT_TYPES } from '../../lib/clinical/constants'
 import { sofaRisk } from '../../lib/clinical/sofa'
 import { staySofaToday } from '../../lib/supabase/derive'
@@ -35,6 +36,7 @@ export function ExecutivePage() {
           {' · '}
           {now.toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' })}
         </p>
+        <ThemeToggle />
       </header>
 
       <main aria-label="Resumen ejecutivo">

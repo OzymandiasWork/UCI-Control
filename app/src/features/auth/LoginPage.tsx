@@ -2,6 +2,7 @@ import { useState, type FormEvent } from 'react'
 import { supabase } from '../../lib/supabase/client'
 import { Button } from '../../design-system/Button'
 import { TextField } from '../../design-system/Field'
+import { ThemeToggle } from '../../design-system/ThemeToggle'
 import './auth.css'
 
 export function LoginPage() {
@@ -21,6 +22,7 @@ export function LoginPage() {
 
   return (
     <main className="login">
+      <div className="login__theme"><ThemeToggle /></div>
       <form className="login__card" onSubmit={onSubmit}>
         <h1>UCI Control</h1>
         <p className="login__unit">UCI Torre Valech · HUAP</p>
