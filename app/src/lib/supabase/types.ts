@@ -1,4 +1,4 @@
-import type { AlertKey } from '../clinical/constants'
+import type { AlertKey, DestinoKey } from '../clinical/constants'
 
 export interface Stay {
   id: string
@@ -10,6 +10,8 @@ export interface Stay {
   alert: AlertKey
   residente: string
   destination: string
+  destino_tipo: DestinoKey
+  comorbilidades: string
   dias_hosp: number
   dias_vm: number
   vm_mode: string
