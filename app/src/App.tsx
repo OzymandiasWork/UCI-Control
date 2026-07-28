@@ -31,7 +31,7 @@ function LoginRoute() {
   return <LoginPage />
 }
 
-function BoxRedirect() {
+export function BoxRedirect() {
   const { boxNumber } = useParams()
   return <Navigate to="/" replace state={{ expandBox: Number(boxNumber) }} />
 }
