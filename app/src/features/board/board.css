@@ -19,12 +19,12 @@
   display: grid; gap: var(--space-3);
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
 }
+.board__grid-item--expanded { grid-column: 1 / -1; }
 
 .boxcard {
   border: 1px solid var(--border); border-left: 3px solid var(--border-strong);
   border-radius: var(--radius-sm); background: var(--surface);
 }
-.boxcard--expanded { grid-column: 1 / -1; }
 .boxcard__row {
   display: flex; align-items: center; gap: var(--space-2); width: 100%;
   min-height: var(--tap-min); padding: var(--space-1) var(--space-2);

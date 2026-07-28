@@ -87,8 +87,8 @@ export function BoardPage() {
           )}
           <ul className="board__grid" ref={gridRef}>
             {visible.map(({ n, stay }) => (
-              <li key={n}>
-                <BoxCard boxNumber={n} stay={stay} expanded={expandedBoxNumber === n}
+              <li key={n} className={!isLoading && expandedBoxNumber === n ? 'board__grid-item--expanded' : undefined}>
+                <BoxCard boxNumber={n} stay={stay} expanded={!isLoading && expandedBoxNumber === n}
                   onToggle={() => setExpandedBoxNumber(cur => cur === n ? null : n)} />
               </li>
             ))}
