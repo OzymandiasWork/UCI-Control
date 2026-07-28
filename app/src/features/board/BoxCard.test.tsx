@@ -1,5 +1,36 @@
 import { render, screen } from '@testing-library/react'
-import { MemoryRouter } from 'react-router-dom'
+import userEvent from '@testing-library/user-event'
+import { vi } from 'vitest'
+
+// Mock Supabase hooks and client before anything imports them
+vi.mock('../../lib/supabase/useBoard', () => ({
+  useAdmitStay: () => ({ mutate: vi.fn(), isPending: false, isError: false }),
+  useDischargeStay: () => ({ mutate: vi.fn(), isPending: false, isError: false }),
+  useUpdateStay: () => ({ mutate: vi.fn() }),
+  useChildRow: () => vi.fn(),
+  useVentSettings: () => null,
+  useBloodGases: () => [],
+  useNutrition: () => null,
+  useSofa: () => [],
+  useMetas: () => [],
+  useSugerencias: () => [],
+  useMrc: () => [],
+  useEmrSessions: () => [],
+  useAntibiotics: () => [],
+}))
+
+// Mock all Tab components to avoid loading them
+vi.mock('../patient/tabs/TabClinico', () => ({ TabClinico: () => <div>TabClinico</div> }))
+vi.mock('../patient/tabs/TabVentilacion', () => ({ TabVentilacion: () => <div>TabVentilacion</div> }))
+vi.mock('../patient/tabs/TabEquipo', () => ({ TabEquipo: () => <div>TabEquipo</div> }))
+vi.mock('../patient/tabs/TabATB', () => ({ TabATB: () => <div>TabATB</div> }))
+vi.mock('../patient/tabs/TabNutricion', () => ({ TabNutricion: () => <div>TabNutricion</div> }))
+vi.mock('../patient/tabs/TabSofa', () => ({ TabSofa: () => <div>TabSofa</div> }))
+vi.mock('../patient/tabs/TabMetas', () => ({ TabMetas: () => <div>TabMetas</div> }))
+vi.mock('../patient/tabs/TabSugerencias', () => ({ TabSugerencias: () => <div>TabSugerencias</div> }))
+vi.mock('../patient/tabs/TabFuncional', () => ({ TabFuncional: () => <div>TabFuncional</div> }))
+vi.mock('../patient/tabs/TabEMR', () => ({ TabEMR: () => <div>TabEMR</div> }))
+
 import { BoxCard } from './BoxCard'
 import type { StayFull } from '../../lib/supabase/types'
 import { baseStay } from '../../test/fixtures'
@@ -14,28 +45,42 @@ const stay = baseStay({
   sofa_assessments: [{ id: 'a1', stay_id: 's1', assessed_on: today, resp: 3, coag: 1, liver: 0, cardio: 2, neuro: 0, renal: 1 }],
 })
 
-function renderCard(s: StayFull | null, box = 5) {
-  return render(<MemoryRouter><BoxCard boxNumber={box} stay={s} /></MemoryRouter>)
+function renderCard(s: StayFull | null, box = 5, expanded = false, onToggle = () => {}) {
+  return render(<BoxCard boxNumber={box} stay={s} expanded={expanded} onToggle={onToggle} />)
 }
 
-test('box ocupado muestra paciente, alerta con texto y SOFA', () => {
+test('box ocupado colapsado muestra nombre, diagnóstico, residente y día — sin navegar', () => {
   renderCard(stay)
   expect(screen.getByText('J. Pérez')).toBeInTheDocument()
-  expect(screen.getByText('Crítico')).toBeInTheDocument()
-  expect(screen.getByText(/SOFA 7/)).toBeInTheDocument()
+  expect(screen.getByText(/shock septico/i)).toBeInTheDocument()
+  expect(screen.getByText(/jimenez/i)).toBeInTheDocument()
+  expect(screen.getByText(/d3/i)).toBeInTheDocument()
+  expect(screen.queryByRole('link')).not.toBeInTheDocument()
 })
 
-test('es un link accesible al detalle del box', () => {
-  renderCard(stay)
-  expect(screen.getByRole('link', { name: /box 5/i })).toHaveAttribute('href', '/box/5')
+test('colapsado es un botón accesible que llama onToggle al hacer click', async () => {
+  const onToggle = vi.fn()
+  renderCard(stay, 5, false, onToggle)
+  await userEvent.click(screen.getByRole('button', { name: /box 5/i }))
+  expect(onToggle).toHaveBeenCalledOnce()
 })
 
-test('box libre se anuncia como cama libre', () => {
+test('box libre colapsado se anuncia como cama libre', () => {
   renderCard(null, 7)
   expect(screen.getByText(/cama libre/i)).toBeInTheDocument()
 })
 
-test('con destino_tipo marcado, la tarjeta muestra el badge del destino', () => {
+test('expanded=true muestra el panel ExpandedBox con los tabs', () => {
+  renderCard(stay, 5, true)
+  expect(screen.getByRole('tablist')).toBeInTheDocument()
+})
+
+test('expanded=false NO monta el panel ExpandedBox', () => {
+  renderCard(stay, 5, false)
+  expect(screen.queryByRole('tablist')).not.toBeInTheDocument()
+})
+
+test('con destino_tipo marcado, la fila colapsada muestra el badge del destino', () => {
   renderCard(baseStay({ destino_tipo: 'fallecido', patient_name: 'X' }))
   expect(screen.getByText('✝ Fallecido')).toBeInTheDocument()
 })
