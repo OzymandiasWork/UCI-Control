@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { vi } from 'vitest'
@@ -18,6 +19,14 @@ vi.mock('../../lib/supabase/useBoard', () => ({
   useEmrSessions: () => [],
   useAntibiotics: () => [],
 }))
+
+// ExpandedBox usa useIsMutating() directo de @tanstack/react-query (indicador de guardado
+// automático) sin pasar por useBoard.ts. Se mockea solo ese export para no requerir un
+// QueryClientProvider real en estos tests.
+vi.mock('@tanstack/react-query', async importOriginal => {
+  const actual = await importOriginal<typeof import('@tanstack/react-query')>()
+  return { ...actual, useIsMutating: () => 0 }
+})
 
 // Mock all Tab components to avoid loading them
 vi.mock('../patient/tabs/TabClinico', () => ({ TabClinico: () => <div>TabClinico</div> }))
@@ -88,4 +97,21 @@ test('con destino_tipo marcado, la fila colapsada muestra el badge del destino',
 test('sin destino_tipo no hay badge de destino', () => {
   renderCard(baseStay({ patient_name: 'X' }))
   expect(screen.queryByText(/Destino —/)).not.toBeInTheDocument()
+})
+
+test('al colapsar desde "Colapsar" (dentro del panel), el foco vuelve a la fila del box y no se pierde en <body>', async () => {
+  function Wrapper() {
+    const [expanded, setExpanded] = useState(true)
+    return <BoxCard boxNumber={5} stay={stay} expanded={expanded} onToggle={() => setExpanded(e => !e)} />
+  }
+  render(<Wrapper />)
+  await userEvent.click(screen.getByRole('button', { name: /colapsar/i }))
+  expect(screen.getByRole('button', { name: /box 5:/i })).toHaveFocus()
+})
+
+test('expandido, la fila tiene aria-controls apuntando al panel expandido', () => {
+  renderCard(stay, 5, true)
+  const row = screen.getByRole('button', { name: /box 5:/i })
+  expect(row).toHaveAttribute('aria-controls', 'expanded-box-5')
+  expect(document.getElementById('expanded-box-5')).toBeInTheDocument()
 })

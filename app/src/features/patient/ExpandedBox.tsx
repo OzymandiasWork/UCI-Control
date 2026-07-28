@@ -1,3 +1,4 @@
+import { useIsMutating } from '@tanstack/react-query'
 import { Badge } from '../../design-system/Badge'
 import { Button } from '../../design-system/Button'
 import { Tabs } from '../../design-system/Tabs'
@@ -19,11 +20,21 @@ import './patient.css'
 export function ExpandedBox({ stay, boxNumber, onClose }: {
   stay: StayFull | null; boxNumber: number; onClose: () => void
 }) {
+  const saving = useIsMutating() > 0
+
   return (
-    <div className="expanded-box">
+    <div className="expanded-box" id={`expanded-box-${boxNumber}`}
+      role="region" aria-labelledby={`expanded-box-${boxNumber}-heading`}>
+      <h2 id={`expanded-box-${boxNumber}-heading`} className="expanded-box__heading">
+        Box {boxNumber}{stay?.patient_name ? ` — ${stay.patient_name}` : ''}
+      </h2>
+
       {stay && (
         <div className="expanded-box__summary">
-          <Badge tone={ALERT_TYPES[stay.alert].tone}>{ALERT_TYPES[stay.alert].label}</Badge>
+          {stay.alert !== 'none' && <Badge tone={ALERT_TYPES[stay.alert].tone}>{ALERT_TYPES[stay.alert].label}</Badge>}
+          <span className={`savestate${saving ? ' savestate--busy' : ''}`} role="status">
+            {saving ? 'Guardando…' : '✓ Guardado automático'}
+          </span>
         </div>
       )}
 
@@ -54,13 +65,15 @@ export function ExpandedBox({ stay, boxNumber, onClose }: {
             </p>
           </details>
 
-          <footer className="expanded-box__footer">
+          {/* div, no <footer>: dentro de role="region" un <footer> mapea a un landmark
+              "contentinfo" anidado, lo que viola landmark-contentinfo-is-top-level (axe). */}
+          <div className="expanded-box__footer">
             <Button onClick={onClose}>Colapsar</Button>
             <p className="patient__hint">
               Tranquilo: cada cambio se guarda solo, al instante. Este botón simplemente
               colapsa la tarjeta.
             </p>
-          </footer>
+          </div>
         </>
       )}
     </div>

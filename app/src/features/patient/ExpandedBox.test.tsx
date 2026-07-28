@@ -19,6 +19,15 @@ vi.mock('../../lib/supabase/useBoard', () => ({
   useAntibiotics: () => [],
 }))
 
+// ExpandedBox usa useIsMutating() (indicador "Guardando…"/"✓ Guardado automático") directo
+// de @tanstack/react-query, sin pasar por useBoard.ts. Como estos tests no envuelven con un
+// QueryClientProvider real (mismo enfoque que el resto del repo: mockear el hook, no montar
+// el provider), se mockea solo ese export y se conserva el resto del módulo intacto.
+vi.mock('@tanstack/react-query', async importOriginal => {
+  const actual = await importOriginal<typeof import('@tanstack/react-query')>()
+  return { ...actual, useIsMutating: () => 0 }
+})
+
 // Mock all Tab components
 vi.mock('./tabs/TabClinico', () => ({ TabClinico: () => <div>TabClinico</div> }))
 vi.mock('./tabs/TabVentilacion', () => ({ TabVentilacion: () => <div>TabVentilacion</div> }))
@@ -47,6 +56,17 @@ test('box ocupado muestra los 10 tabs clínicos', () => {
   for (const label of ['Clínico', 'Ventilación', 'Equipo', 'ATB', 'Nutrición', 'SOFA', 'Metas', 'Sugerencias', 'Funcional', 'EMR']) {
     expect(screen.getByRole('tab', { name: label })).toBeInTheDocument()
   }
+})
+
+test('muestra el indicador de guardado automático (reemplazo del guardado manual del prototipo)', () => {
+  render(<ExpandedBox stay={baseStay({ patient_name: 'J. Pérez' })} boxNumber={5} onClose={() => {}} />)
+  expect(screen.getByRole('status')).toHaveTextContent(/guardado automático/i)
+})
+
+test('tiene un encabezado que identifica el box, dentro de una región etiquetada', () => {
+  render(<ExpandedBox stay={baseStay({ patient_name: 'J. Pérez' })} boxNumber={5} onClose={() => {}} />)
+  expect(screen.getByRole('heading', { name: /box 5.*j\. pérez/i })).toBeInTheDocument()
+  expect(screen.getByRole('region', { name: /box 5.*j\. pérez/i })).toBeInTheDocument()
 })
 
 test('muestra la sección "Prevención de IAAS" colapsable, vacía por ahora', () => {

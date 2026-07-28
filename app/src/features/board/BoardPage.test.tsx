@@ -35,6 +35,13 @@ vi.mock('../../lib/supabase/useEvents', () => ({
   useEvents: () => ({ data: [] }),
   useEventMutations: () => ({ add: { mutate: vi.fn() }, remove: { mutate: vi.fn() } }),
 }))
+// ExpandedBox usa useIsMutating() directo de @tanstack/react-query (indicador de guardado
+// automático) sin pasar por useBoard.ts. Se mockea solo ese export, igual que en
+// ExpandedBox.test.tsx, para no requerir un QueryClientProvider real en estos tests.
+vi.mock('@tanstack/react-query', async importOriginal => {
+  const actual = await importOriginal<typeof import('@tanstack/react-query')>()
+  return { ...actual, useIsMutating: () => 0 }
+})
 
 function renderBoard(initialEntries: ComponentProps<typeof MemoryRouter>['initialEntries'] = ['/']) {
   return render(<MemoryRouter initialEntries={initialEntries}><BoardPage /></MemoryRouter>)
