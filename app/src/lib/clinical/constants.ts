@@ -20,16 +20,22 @@ export const ACCESS_TYPES = ['CVC', 'FAP', 'PICC', 'Port-a-cath', 'PVC', 'Diáli
 // Otros accesos (no vasculares) — lista abierta: drenajes futuros se agregan aquí.
 export const OTHER_ACCESS_TYPES = ['Sonda urinaria (Foley)'] as const
 
-export type DestinoKey = '' | 'tac' | 'pabellon' | 'egreso' | 'ingreso' | 'traslado' | 'fallecido'
+export type DestinoKey = '' | 'tac' | 'pabellon' | 'pabellon_angio' | 'egreso' | 'egreso_sala' | 'ingreso' | 'traslado' | 'fallecido'
 
 // Claves tac/pabellon/egreso/ingreso verbatim del prototipo UCI_Dashboard.html (línea 603);
-// traslado/fallecido del doc "Resumen de Cambios" (Dr. Arteaga, 2026-07-06).
+// traslado/fallecido del doc "Resumen de Cambios" (Dr. Arteaga, 2026-07-06);
+// pabellon_angio/egreso_sala verbatim de UCI_Dashboard (16).html (línea 1374, dashboard
+// definitivo confirmado por el usuario 2026-07-28) — unión de ambos catálogos por decisión
+// explícita del usuario: no se retira traslado/fallecido porque ya hay stays en producción
+// con esos valores guardados.
 // En la BD se guarda la CLAVE (como alert), no el label — los KPIs cuentan por clave.
 export const DESTINO_TIPOS: Record<DestinoKey, string> = {
   '': 'Destino —',
   tac: '→ TAC',
   pabellon: '→ Pabellón',
+  pabellon_angio: '→ Pabellón angio/intervencional',
   egreso: '→ Egreso',
+  egreso_sala: '→ Egreso a sala',
   ingreso: '⬇ Ingreso',
   traslado: '→ Traslado a otro hospital',
   fallecido: '✝ Fallecido',

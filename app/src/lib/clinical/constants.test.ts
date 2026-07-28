@@ -2,12 +2,14 @@ import { describe, expect, test } from 'vitest'
 import { DESTINO_TIPOS, OTHER_ACCESS_TYPES, VM_MODES } from './constants'
 
 describe('catálogo de destinos', () => {
-  test('las 7 opciones exactas: 4 verbatim del prototipo + traslado/fallecido del doc 2026-07-06', () => {
+  test('las 9 opciones exactas: unión de ambos catálogos (producción + dashboard definitivo)', () => {
     expect(DESTINO_TIPOS).toEqual({
       '': 'Destino —',
       tac: '→ TAC',
       pabellon: '→ Pabellón',
+      pabellon_angio: '→ Pabellón angio/intervencional',
       egreso: '→ Egreso',
+      egreso_sala: '→ Egreso a sala',
       ingreso: '⬇ Ingreso',
       traslado: '→ Traslado a otro hospital',
       fallecido: '✝ Fallecido',
