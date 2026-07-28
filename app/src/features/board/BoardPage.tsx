@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { SelectField, TextField } from '../../design-system/Field'
 import { ThemeToggle } from '../../design-system/ThemeToggle'
 import { ALERT_TYPES, BOX_COUNT, RESIDENTES } from '../../lib/clinical/constants'
@@ -15,6 +15,9 @@ const RESIDENTE_FILTERS = ['Todos', ...RESIDENTES]
 
 export function BoardPage() {
   const { data: stays = [], isLoading, isError, refetch } = useBoard()
+  const location = useLocation()
+  const initialExpand = (location.state as { expandBox?: number } | null)?.expandBox ?? null
+  const [expandedBoxNumber, setExpandedBoxNumber] = useState<number | null>(initialExpand)
   const [alertFilter, setAlertFilter] = useState('Todas')
   const [residenteFilter, setResidenteFilter] = useState('Todos')
   const [search, setSearch] = useState('')
@@ -45,6 +48,11 @@ export function BoardPage() {
     }
     return true
   })
+
+  useEffect(() => {
+    if (expandedBoxNumber === null) return
+    if (!visible.some(({ n }) => n === expandedBoxNumber)) setExpandedBoxNumber(null)
+  }, [visible, expandedBoxNumber])
 
   return (
     <div className="board">
@@ -79,7 +87,10 @@ export function BoardPage() {
           )}
           <ul className="board__grid" ref={gridRef}>
             {visible.map(({ n, stay }) => (
-              <li key={n}><BoxCard boxNumber={n} stay={stay} /></li>
+              <li key={n}>
+                <BoxCard boxNumber={n} stay={stay} expanded={expandedBoxNumber === n}
+                  onToggle={() => setExpandedBoxNumber(cur => cur === n ? null : n)} />
+              </li>
             ))}
           </ul>
         </main>
