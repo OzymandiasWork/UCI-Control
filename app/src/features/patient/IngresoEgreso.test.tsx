@@ -26,6 +26,11 @@ test('egresar: el clic no borra de inmediato, muestra confirmación', async () =
   expect(discharge.mutate).not.toHaveBeenCalled()
 })
 
+test('al montar (ej. al expandir un box), el foco NO salta a "Egresar paciente…"', () => {
+  render(<IngresoEgreso boxNumber={3} stay={stay} />)
+  expect(screen.getByRole('button', { name: /egresar paciente/i })).not.toHaveFocus()
+})
+
 test('al confirmar aparecer, el foco va a "Cancelar" (opción segura por defecto)', async () => {
   render(<IngresoEgreso boxNumber={3} stay={stay} />)
   await userEvent.click(screen.getByRole('button', { name: /egresar paciente/i }))

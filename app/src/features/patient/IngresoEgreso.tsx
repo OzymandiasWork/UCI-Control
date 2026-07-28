@@ -9,11 +9,16 @@ export function IngresoEgreso({ boxNumber, stay }: { boxNumber: number; stay: St
   const [confirming, setConfirming] = useState(false)
   const idleRef = useRef<HTMLButtonElement>(null)
   const cancelRef = useRef<HTMLButtonElement>(null)
+  const mounted = useRef(false)
 
   // Gestión de foco (WCAG 2.4.3) + Escape para cancelar: mismo patrón que
   // ConfirmDeleteButton — egresar a un paciente es la acción más delicada
   // de la app, así que merece al menos la misma protección.
+  // Se ignora el primer render: IngresoEgreso ahora se monta cada vez que se
+  // expande un box (acordeón inline), y sin este guard el foco saltaría al
+  // botón "Egresar paciente…" cada vez que alguien simplemente abre un box.
   useEffect(() => {
+    if (!mounted.current) { mounted.current = true; return }
     if (confirming) cancelRef.current?.focus()
     else idleRef.current?.focus()
   }, [confirming])
