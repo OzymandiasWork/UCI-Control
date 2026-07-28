@@ -1,4 +1,3 @@
-// app/src/features/board/BoxCard.tsx
 import { Badge } from '../../design-system/Badge'
 import { ALERT_TYPES, DESTINO_TIPOS } from '../../lib/clinical/constants'
 import type { StayFull } from '../../lib/supabase/types'
