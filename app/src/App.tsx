@@ -1,5 +1,5 @@
 import { lazy, Suspense, type ReactNode } from 'react'
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Navigate, Route, Routes, useParams } from 'react-router-dom'
 import { LoginPage } from './features/auth/LoginPage'
 import { ConnectionBanner } from './features/shared/ConnectionBanner'
 import { useSession } from './lib/supabase/useSession'
@@ -9,7 +9,6 @@ import { useSession } from './lib/supabase/useSession'
 // GSAP, etc. Reduce el peso de la primera carga — importa en redes de
 // hospital/datos móviles, que es donde vive esta app.
 const BoardPage = lazy(() => import('./features/board/BoardPage').then(m => ({ default: m.BoardPage })))
-const PatientPage = lazy(() => import('./features/patient/PatientPage').then(m => ({ default: m.PatientPage })))
 const ExecutivePage = lazy(() => import('./features/executive/ExecutivePage').then(m => ({ default: m.ExecutivePage })))
 const TurnoPage = lazy(() => import('./features/turno/TurnoPage').then(m => ({ default: m.TurnoPage })))
 
@@ -32,6 +31,11 @@ function LoginRoute() {
   return <LoginPage />
 }
 
+function BoxRedirect() {
+  const { boxNumber } = useParams()
+  return <Navigate to="/" replace state={{ expandBox: Number(boxNumber) }} />
+}
+
 export default function App() {
   return (
     <BrowserRouter>
@@ -39,7 +43,7 @@ export default function App() {
       <Routes>
         <Route path="/login" element={<LoginRoute />} />
         <Route path="/" element={<Protected><BoardPage /></Protected>} />
-        <Route path="/box/:boxNumber" element={<Protected><PatientPage /></Protected>} />
+        <Route path="/box/:boxNumber" element={<Protected><BoxRedirect /></Protected>} />
         <Route path="/ejecutivo" element={<Protected><ExecutivePage /></Protected>} />
         <Route path="/turno" element={<Protected><TurnoPage /></Protected>} />
         <Route path="*" element={<Navigate to="/" replace />} />
