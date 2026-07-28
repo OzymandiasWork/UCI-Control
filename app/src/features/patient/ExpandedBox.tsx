@@ -14,6 +14,7 @@ import { TabMetas } from './tabs/TabMetas'
 import { TabSugerencias } from './tabs/TabSugerencias'
 import { TabFuncional } from './tabs/TabFuncional'
 import { TabEMR } from './tabs/TabEMR'
+import './patient.css'
 
 export function ExpandedBox({ stay, boxNumber, onClose }: {
   stay: StayFull | null; boxNumber: number; onClose: () => void
