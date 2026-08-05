@@ -9,16 +9,22 @@ export function IngresoEgreso({ boxNumber, stay }: { boxNumber: number; stay: St
   const [confirming, setConfirming] = useState(false)
   const idleRef = useRef<HTMLButtonElement>(null)
   const cancelRef = useRef<HTMLButtonElement>(null)
-  const mounted = useRef(false)
+  const prevConfirming = useRef(confirming)
 
   // Gestión de foco (WCAG 2.4.3) + Escape para cancelar: mismo patrón que
   // ConfirmDeleteButton — egresar a un paciente es la acción más delicada
   // de la app, así que merece al menos la misma protección.
-  // Se ignora el primer render: IngresoEgreso ahora se monta cada vez que se
-  // expande un box (acordeón inline), y sin este guard el foco saltaría al
-  // botón "Egresar paciente…" cada vez que alguien simplemente abre un box.
+  // Solo mueve el foco cuando `confirming` REALMENTE cambia de valor (no en
+  // cada montaje): IngresoEgreso ahora se monta cada vez que se expande un
+  // box (acordeón inline), y sin este guard el foco saltaría al botón
+  // "Egresar paciente…" cada vez que alguien simplemente abre un box. Un
+  // guard de "primer render" con un ref booleano no sirve aquí porque
+  // React.StrictMode monta-desmonta-remonta en desarrollo y el ref
+  // sobrevive esa simulación; comparar contra el valor anterior sí es
+  // estable frente a eso.
   useEffect(() => {
-    if (!mounted.current) { mounted.current = true; return }
+    if (prevConfirming.current === confirming) return
+    prevConfirming.current = confirming
     if (confirming) cancelRef.current?.focus()
     else idleRef.current?.focus()
   }, [confirming])

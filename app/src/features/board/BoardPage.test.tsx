@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { vi } from 'vitest'
 import { BoardPage } from './BoardPage'
+import { useBoard } from '../../lib/supabase/useBoard'
 import { baseStay } from '../../test/fixtures'
 
 const stays = [
@@ -12,7 +13,7 @@ const stays = [
 ]
 
 vi.mock('../../lib/supabase/useBoard', () => ({
-  useBoard: () => ({ data: stays, isLoading: false, isError: false, refetch: vi.fn() }),
+  useBoard: vi.fn(() => ({ data: stays, isLoading: false, isError: false, refetch: vi.fn() })),
   // Expanding a box mounts ExpandedBox -> IngresoEgreso + the default "Clínico" tab,
   // which also pull mutations from this module. Stubbed so expansion is mountable.
   useAdmitStay: () => ({ mutate: vi.fn(), isPending: false, isError: false }),
@@ -80,4 +81,19 @@ test('filtrar por residente que excluye el box expandido lo colapsa automáticam
   expect(screen.getByRole('tablist')).toBeInTheDocument()
   await userEvent.selectOptions(screen.getByLabelText(/filtrar por residente/i), 'saenz')
   expect(screen.queryByRole('tablist')).not.toBeInTheDocument()
+})
+
+test('mientras isLoading es true, ningún box (ocupado o no) es expandible', () => {
+  // BoardPage solo lee { data, isLoading, isError, refetch } de este hook — el resto de las
+  // propiedades del UseQueryResult real de react-query no le importan, así que se castea el
+  // literal simplificado en vez de construir la unión discriminada completa.
+  vi.mocked(useBoard).mockReturnValueOnce(
+    { data: [], isLoading: true, isError: false, refetch: vi.fn() } as unknown as ReturnType<typeof useBoard>,
+  )
+  renderBoard([{ pathname: '/', state: { expandBox: 4 } }])
+  // Con data:[] y isLoading:true, el box 4 (que en el fixture real tiene paciente)
+  // no debe mostrarse como "Cama libre" expandible ni montar ExpandedBox: el gate
+  // `!isLoading && expandedBoxNumber === n` en BoardPage evita ambos.
+  expect(screen.queryByRole('tablist')).not.toBeInTheDocument()
+  expect(screen.queryByRole('button', { name: /ingresar paciente/i })).not.toBeInTheDocument()
 })
